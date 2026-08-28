@@ -43,7 +43,7 @@ from pathlib import Path
 # ---------------------------------------------------------------------------
 SCRIPT_DIR = Path(__file__).resolve().parent
 REPO_ROOT   = SCRIPT_DIR.parent
-COBOL_FILE  = REPO_ROOT / "payroll.cbl"
+COBOL_FILE  = REPO_ROOT / "cobol" / "payroll.cbl"
 DATA_DIR    = REPO_ROOT / "data"
 OUTPUT_FILE = DATA_DIR / "rules.json"
 

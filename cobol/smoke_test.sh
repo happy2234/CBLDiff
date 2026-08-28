@@ -94,7 +94,7 @@ e = '$expected'.strip()
 try:
     match = abs(float(a) - float(e)) < 0.005
     sys.exit(0 if match else 1)
-except:
+except (ValueError, TypeError):
     sys.exit(0 if a == e else 1)
 " 2>/dev/null; then
         echo "  [PASS] $label: field[$field_idx] = $actual (expected $expected)"

@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "source_file": "payroll.cbl",
-  "total_lines": 291,
+  "total_lines": 290,
   "generated_by": "cbldiff/rule_miner.py",
   "rule_count": 15,
   "rules": [
@@ -75,7 +75,7 @@
       "source_file": "payroll.cbl",
       "source_lines": [
         192,
-        231
+        230
       ],
       "paragraph": "COMPUTE-FEDERAL-TAX",
       "condition": "GROSS <= 500.00",
@@ -103,7 +103,7 @@
       "source_file": "payroll.cbl",
       "source_lines": [
         192,
-        231
+        230
       ],
       "paragraph": "COMPUTE-FEDERAL-TAX",
       "condition": "GROSS > 500.00 AND GROSS <= 1500.00",
@@ -133,7 +133,7 @@
       "source_file": "payroll.cbl",
       "source_lines": [
         192,
-        231
+        230
       ],
       "paragraph": "COMPUTE-FEDERAL-TAX",
       "condition": "GROSS > 1500.00",
@@ -161,7 +161,7 @@
       "source_file": "payroll.cbl",
       "source_lines": [
         192,
-        231
+        230
       ],
       "paragraph": "COMPUTE-FEDERAL-TAX",
       "condition": "ALWAYS (post-bracket calculation)",
@@ -189,8 +189,8 @@
       "description": "State tax: flat 3.07% of gross (PA rate)",
       "source_file": "payroll.cbl",
       "source_lines": [
-        232,
-        238
+        231,
+        237
       ],
       "paragraph": "COMPUTE-STATE-TAX",
       "condition": "STATUS = OK",
@@ -216,8 +216,8 @@
       "description": "Social Security: 6.20% of gross; weekly SS cap = 3242.31 (annual $168,600 / 52)",
       "source_file": "payroll.cbl",
       "source_lines": [
-        239,
-        250
+        238,
+        249
       ],
       "paragraph": "COMPUTE-SS-TAX",
       "condition": "STATUS = OK",
@@ -246,8 +246,8 @@
       "description": "Medicare: flat 1.45% of gross (no cap)",
       "source_file": "payroll.cbl",
       "source_lines": [
-        251,
-        258
+        250,
+        257
       ],
       "paragraph": "COMPUTE-MEDICARE-TAX",
       "condition": "STATUS = OK",
@@ -274,7 +274,7 @@
       "source_file": "payroll.cbl",
       "source_lines": [
         167,
-        258
+        257
       ],
       "paragraph": [
         "COMPUTE-GROSS",
@@ -300,8 +300,8 @@
       "description": "Net pay = gross - federal - state - ss - medicare; net pay floor = 0.00",
       "source_file": "payroll.cbl",
       "source_lines": [
-        259,
-        270
+        258,
+        269
       ],
       "paragraph": "COMPUTE-NET-PAY",
       "condition": "STATUS = OK",
@@ -374,7 +374,7 @@
       "source_file": "payroll.cbl",
       "source_lines": [
         192,
-        231
+        230
       ],
       "paragraph": "COMPUTE-FEDERAL-TAX",
       "condition": "DEPENDENTS > 5",

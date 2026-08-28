@@ -37,7 +37,7 @@ from typing import Any
 REPO_ROOT   = Path(__file__).resolve().parent.parent
 DATA_DIR    = REPO_ROOT / "data"
 JAVA_DIR    = REPO_ROOT / "java"
-COBOL_BIN   = REPO_ROOT / "payroll"
+COBOL_BIN   = REPO_ROOT / "cobol" / "payroll"
 INPUTS_FILE = DATA_DIR / "test_inputs.json"
 COBOL_OUT   = DATA_DIR / "cobol_outputs.json"
 JAVA_OUT    = DATA_DIR / "java_outputs.json"
@@ -194,7 +194,7 @@ def run_cobol_all(test_cases: list[dict]) -> list[dict[str, Any]]:
         # rather than receiving the Windows-style absolute path which bash
         # cannot interpret as an executable path.
         safe_input = pipe_input.replace("'", "'\\''")
-        cmd = ["bash", "-c", f"printf '%s\\n' '{safe_input}' | ./payroll"]
+        cmd = ["bash", "-c", f"printf '%s\\n' '{safe_input}' | {COBOL_BIN}"]
 
         try:
             proc = subprocess.run(

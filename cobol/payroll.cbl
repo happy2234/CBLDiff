@@ -196,15 +196,16 @@
                    WS-GROSS * WS-FED-RATE-1
 
       *>  RULE-05: bracket 2 — 500 < gross <= 1500 taxed at 12%
-           ELSE IF WS-GROSS > WS-BRACKET-1-LIMIT AND
-                   WS-GROSS <= WS-BRACKET-2-LIMIT
-               COMPUTE WS-FEDERAL-BEFORE-DEP ROUNDED =
-                   WS-GROSS * WS-FED-RATE-2
+           ELSE
+               IF WS-GROSS <= WS-BRACKET-2-LIMIT
+                   COMPUTE WS-FEDERAL-BEFORE-DEP ROUNDED =
+                       WS-GROSS * WS-FED-RATE-2
 
       *>  RULE-06: bracket 3 — gross > 1500 taxed at 22%
-           ELSE
-               COMPUTE WS-FEDERAL-BEFORE-DEP ROUNDED =
-                   WS-GROSS * WS-FED-RATE-3
+               ELSE
+                   COMPUTE WS-FEDERAL-BEFORE-DEP ROUNDED =
+                       WS-GROSS * WS-FED-RATE-3
+               END-IF
            END-IF
 
       *>  RULE-07: dependent allowance — $80 per dependent, max 5
