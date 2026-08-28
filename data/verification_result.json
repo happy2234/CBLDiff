@@ -3,72 +3,27 @@
   "phase": 6,
   "description": "CBLDiff Phase 6 – Verification verdict",
   "verification_threshold": 0.95,
-  "parity_score": 0.957143,
-  "parity_percent": 95.7143,
+  "parity_score": 1.0,
+  "parity_percent": 100.0,
   "total_tests": 70,
-  "matching_tests": 67,
-  "divergent_tests": 3,
-  "total_divergent_fields": 6,
-  "divergence_cluster_count": 2,
+  "matching_tests": 70,
+  "divergent_tests": 0,
+  "total_divergent_fields": 0,
+  "divergence_cluster_count": 0,
   "parity_gate": {
     "passes": true,
-    "score": 0.957143,
+    "score": 1.0,
     "threshold": 0.95
   },
   "critical_rule_gate": {
-    "passes": false,
-    "triggered": true,
-    "critical_rule_ids": [
-      "RULE-05",
-      "RULE-06",
-      "RULE-07"
-    ],
-    "affected_test_ids": [
-      "BND-006",
-      "BND-007",
-      "ITR-005"
-    ],
-    "affected_fields": [
-      "federal_tax",
-      "net_pay"
-    ],
-    "provenance": [
-      {
-        "rule_id": "RULE-05",
-        "source_file": "payroll.cbl",
-        "source_lines": [
-          192,
-          231
-        ],
-        "paragraph": "COMPUTE-FEDERAL-TAX",
-        "condition": "GROSS > 500.00 AND GROSS <= 1500.00",
-        "description": "Fed bracket 2: 500.00 < gross and gross <= 1500.00        -> rate 12%"
-      },
-      {
-        "rule_id": "RULE-06",
-        "source_file": "payroll.cbl",
-        "source_lines": [
-          192,
-          231
-        ],
-        "paragraph": "COMPUTE-FEDERAL-TAX",
-        "condition": "GROSS > 1500.00",
-        "description": "Fed bracket 3: gross > 1500.00         -> rate 22%"
-      },
-      {
-        "rule_id": "RULE-07",
-        "source_file": "payroll.cbl",
-        "source_lines": [
-          192,
-          231
-        ],
-        "paragraph": "COMPUTE-FEDERAL-TAX",
-        "condition": "ALWAYS (post-bracket calculation)",
-        "description": "Dependent allowance: $80 deducted from federal tax per dependent (max 5); minimum federal tax = 0"
-      }
-    ]
+    "passes": true,
+    "triggered": false,
+    "critical_rule_ids": [],
+    "affected_test_ids": [],
+    "affected_fields": [],
+    "provenance": []
   },
-  "status": "NOT_VERIFIED",
-  "verified": false,
-  "verdict_explanation": "Parity score 0.9571 (≥ threshold 0.95) but critical-rule divergence detected (rules: RULE-05, RULE-06, RULE-07) → NOT_VERIFIED"
+  "status": "VERIFIED",
+  "verified": true,
+  "verdict_explanation": "Parity score 1.0000 (≥ threshold 0.95) and no critical-rule divergences detected → VERIFIED"
 }

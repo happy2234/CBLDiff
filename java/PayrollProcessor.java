@@ -99,8 +99,8 @@ public class PayrollProcessor {
         if (gross.compareTo(BRACKET_1_LIMIT) <= 0) {
             // RULE-04: bracket 1 — gross <= 500.00 @ 10%
             federalBeforeDep = round2(gross.multiply(FED_RATE_1));
-        } else if (gross.compareTo(BRACKET_2_LIMIT) < 0) {
-            // RULE-05: bracket 2 — 500 < gross < 1500 @ 12%  [MUTATED: was <=]
+        } else if (gross.compareTo(BRACKET_2_LIMIT) <= 0) {
+            // RULE-05: bracket 2 — 500 < gross <= 1500 @ 12%
             federalBeforeDep = round2(gross.multiply(FED_RATE_2));
         } else {
             // RULE-06: bracket 3 — gross > 1500 @ 22%
