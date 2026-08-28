@@ -1,0 +1,91 @@
+{
+  "schema_version": "1.0",
+  "phase": 5,
+  "description": "CBLDiff dual-executor baseline run",
+  "total_tests": 70,
+  "cobol": {
+    "successes": 70,
+    "process_failures": 0,
+    "validation_errors": 9
+  },
+  "java": {
+    "successes": 70,
+    "process_failures": 0,
+    "validation_errors": 9
+  },
+  "parity": {
+    "matches": 67,
+    "mismatches": 3,
+    "baseline_result": "FAIL",
+    "mismatches_detail": [
+      {
+        "test_id": "BND-006",
+        "category": "boundary",
+        "pipe_input": "BND006|40.00|37.50|N|0.00|0",
+        "cobol_raw": "BND006|0001500.00|0000180.00|0000046.05|0000093.00|0000021.75|0001159.20|OK",
+        "java_raw": "BND006|0001500.00|0000330.00|0000046.05|0000093.00|0000021.75|0001009.20|OK",
+        "field_diffs": [
+          {
+            "field": "federal_tax",
+            "cobol": "0000180.00",
+            "java": "0000330.00",
+            "delta": -150.0
+          },
+          {
+            "field": "net_pay",
+            "cobol": "0001159.20",
+            "java": "0001009.20",
+            "delta": 150.0
+          }
+        ]
+      },
+      {
+        "test_id": "BND-007",
+        "category": "boundary",
+        "pipe_input": "BND007|0.00|0.00|Y|1500.00|0",
+        "cobol_raw": "BND007|0001500.00|0000180.00|0000046.05|0000093.00|0000021.75|0001159.20|OK",
+        "java_raw": "BND007|0001500.00|0000330.00|0000046.05|0000093.00|0000021.75|0001009.20|OK",
+        "field_diffs": [
+          {
+            "field": "federal_tax",
+            "cobol": "0000180.00",
+            "java": "0000330.00",
+            "delta": -150.0
+          },
+          {
+            "field": "net_pay",
+            "cobol": "0001159.20",
+            "java": "0001009.20",
+            "delta": 150.0
+          }
+        ]
+      },
+      {
+        "test_id": "ITR-005",
+        "category": "interaction",
+        "pipe_input": "ITR005|40.00|37.50|N|0.00|1",
+        "cobol_raw": "ITR005|0001500.00|0000100.00|0000046.05|0000093.00|0000021.75|0001239.20|OK",
+        "java_raw": "ITR005|0001500.00|0000250.00|0000046.05|0000093.00|0000021.75|0001089.20|OK",
+        "field_diffs": [
+          {
+            "field": "federal_tax",
+            "cobol": "0000100.00",
+            "java": "0000250.00",
+            "delta": -150.0
+          },
+          {
+            "field": "net_pay",
+            "cobol": "0001239.20",
+            "java": "0001089.20",
+            "delta": 150.0
+          }
+        ]
+      }
+    ]
+  },
+  "files_written": [
+    "C:\\Users\\gaura\\.bob\\playground\\cobol\\data\\cobol_outputs.json",
+    "C:\\Users\\gaura\\.bob\\playground\\cobol\\data\\java_outputs.json",
+    "C:\\Users\\gaura\\.bob\\playground\\cobol\\data\\execution_summary.json"
+  ]
+}

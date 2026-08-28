@@ -1,0 +1,1963 @@
+{
+  "schema_version": "1.0",
+  "phase": 6,
+  "description": "CBLDiff Phase 6 – Behavioral parity & divergence analysis",
+  "clustering_method": "deterministic:field+rule+boundary_region",
+  "ml_clustering_used": false,
+  "ml_clustering_note": "ML clustering (KMeans/DBSCAN) was intentionally deferred. With zero divergences no meaningful clusters can be learned. The code is structured so an ML back-end can replace _assign_cluster_key() when divergences accumulate.",
+  "statistics": {
+    "total_tests": 70,
+    "matching_tests": 67,
+    "divergent_tests": 3,
+    "missing_tests": 0,
+    "total_divergent_fields": 6,
+    "parity_score": 0.957143,
+    "parity_percent": 95.7143
+  },
+  "rule_mapping": {
+    "strategy": "field->category->rule_id + targeted_rule_ids from test inputs",
+    "rule_count": 15,
+    "field_to_rule_mapping": {
+      "gross": [
+        "RULE-01",
+        "RULE-02",
+        "RULE-03"
+      ],
+      "federal_tax": [
+        "RULE-04",
+        "RULE-05",
+        "RULE-06",
+        "RULE-07",
+        "RULE-15"
+      ],
+      "state_tax": [
+        "RULE-08"
+      ],
+      "ss_tax": [
+        "RULE-09"
+      ],
+      "medicare_tax": [
+        "RULE-10"
+      ],
+      "net_pay": [
+        "RULE-12"
+      ],
+      "status": [
+        "RULE-13",
+        "RULE-14"
+      ],
+      "employee_id": []
+    }
+  },
+  "divergence_clusters": [
+    {
+      "cluster_key": "federal_tax::RULE-05::gross_bracket_2",
+      "cluster_method": "deterministic:field+rule+boundary_region",
+      "field": "federal_tax",
+      "primary_rule_id": "RULE-05",
+      "boundary_region": "gross_bracket_2",
+      "affected_test_ids": [
+        "BND-006",
+        "BND-007",
+        "ITR-005"
+      ],
+      "divergence_count": 3,
+      "rule_ids": [
+        "RULE-05",
+        "RULE-06",
+        "RULE-07"
+      ],
+      "provenance": [
+        {
+          "rule_id": "RULE-05",
+          "source_file": "payroll.cbl",
+          "source_lines": [
+            192,
+            231
+          ],
+          "paragraph": "COMPUTE-FEDERAL-TAX",
+          "condition": "GROSS > 500.00 AND GROSS <= 1500.00",
+          "description": "Fed bracket 2: 500.00 < gross and gross <= 1500.00        -> rate 12%"
+        },
+        {
+          "rule_id": "RULE-06",
+          "source_file": "payroll.cbl",
+          "source_lines": [
+            192,
+            231
+          ],
+          "paragraph": "COMPUTE-FEDERAL-TAX",
+          "condition": "GROSS > 1500.00",
+          "description": "Fed bracket 3: gross > 1500.00         -> rate 22%"
+        },
+        {
+          "rule_id": "RULE-07",
+          "source_file": "payroll.cbl",
+          "source_lines": [
+            192,
+            231
+          ],
+          "paragraph": "COMPUTE-FEDERAL-TAX",
+          "condition": "ALWAYS (post-bracket calculation)",
+          "description": "Dependent allowance: $80 deducted from federal tax per dependent (max 5); minimum federal tax = 0"
+        }
+      ],
+      "explanation": "RULE: RULE-05\nCondition: GROSS > 500.00 AND GROSS <= 1500.00\nDescription: Fed bracket 2: 500.00 < gross and gross <= 1500.00        -> rate 12%\nAffected output field: federal_tax\nAffected test cases: BND-006, BND-007, ITR-005\nMax absolute difference: 150.000000\nSource: payroll.cbl lines 192–231  [COMPUTE-FEDERAL-TAX]\nSource: payroll.cbl lines 192–231  [COMPUTE-FEDERAL-TAX]\nSource: payroll.cbl lines 192–231  [COMPUTE-FEDERAL-TAX]",
+      "members": [
+        {
+          "test_id": "BND-006",
+          "category": "boundary",
+          "input": {
+            "employee_id": "BND006",
+            "hours": "40.00",
+            "rate": "37.50",
+            "is_salaried": "N",
+            "salary": "0.00",
+            "dependents": 0
+          },
+          "boundary_region": "gross_bracket_2",
+          "rule_ids": [
+            "RULE-05",
+            "RULE-06"
+          ],
+          "provenance": [
+            {
+              "rule_id": "RULE-05",
+              "source_file": "payroll.cbl",
+              "source_lines": [
+                192,
+                231
+              ],
+              "paragraph": "COMPUTE-FEDERAL-TAX",
+              "condition": "GROSS > 500.00 AND GROSS <= 1500.00",
+              "description": "Fed bracket 2: 500.00 < gross and gross <= 1500.00        -> rate 12%"
+            },
+            {
+              "rule_id": "RULE-06",
+              "source_file": "payroll.cbl",
+              "source_lines": [
+                192,
+                231
+              ],
+              "paragraph": "COMPUTE-FEDERAL-TAX",
+              "condition": "GROSS > 1500.00",
+              "description": "Fed bracket 3: gross > 1500.00         -> rate 22%"
+            }
+          ],
+          "field": "federal_tax",
+          "cobol_raw": "0000180.00",
+          "java_raw": "0000330.00",
+          "cobol_normalized": 180.0,
+          "java_normalized": 330.0,
+          "absolute_difference": 150.0,
+          "comparison_type": "monetary_tolerance",
+          "tolerance": 0.01
+        },
+        {
+          "test_id": "BND-007",
+          "category": "boundary",
+          "input": {
+            "employee_id": "BND007",
+            "hours": "0.00",
+            "rate": "0.00",
+            "is_salaried": "Y",
+            "salary": "1500.00",
+            "dependents": 0
+          },
+          "boundary_region": "gross_bracket_2",
+          "rule_ids": [
+            "RULE-05"
+          ],
+          "provenance": [
+            {
+              "rule_id": "RULE-05",
+              "source_file": "payroll.cbl",
+              "source_lines": [
+                192,
+                231
+              ],
+              "paragraph": "COMPUTE-FEDERAL-TAX",
+              "condition": "GROSS > 500.00 AND GROSS <= 1500.00",
+              "description": "Fed bracket 2: 500.00 < gross and gross <= 1500.00        -> rate 12%"
+            }
+          ],
+          "field": "federal_tax",
+          "cobol_raw": "0000180.00",
+          "java_raw": "0000330.00",
+          "cobol_normalized": 180.0,
+          "java_normalized": 330.0,
+          "absolute_difference": 150.0,
+          "comparison_type": "monetary_tolerance",
+          "tolerance": 0.01
+        },
+        {
+          "test_id": "ITR-005",
+          "category": "interaction",
+          "input": {
+            "employee_id": "ITR005",
+            "hours": "40.00",
+            "rate": "37.50",
+            "is_salaried": "N",
+            "salary": "0.00",
+            "dependents": 1
+          },
+          "boundary_region": "gross_bracket_2",
+          "rule_ids": [
+            "RULE-05",
+            "RULE-07"
+          ],
+          "provenance": [
+            {
+              "rule_id": "RULE-05",
+              "source_file": "payroll.cbl",
+              "source_lines": [
+                192,
+                231
+              ],
+              "paragraph": "COMPUTE-FEDERAL-TAX",
+              "condition": "GROSS > 500.00 AND GROSS <= 1500.00",
+              "description": "Fed bracket 2: 500.00 < gross and gross <= 1500.00        -> rate 12%"
+            },
+            {
+              "rule_id": "RULE-07",
+              "source_file": "payroll.cbl",
+              "source_lines": [
+                192,
+                231
+              ],
+              "paragraph": "COMPUTE-FEDERAL-TAX",
+              "condition": "ALWAYS (post-bracket calculation)",
+              "description": "Dependent allowance: $80 deducted from federal tax per dependent (max 5); minimum federal tax = 0"
+            }
+          ],
+          "field": "federal_tax",
+          "cobol_raw": "0000100.00",
+          "java_raw": "0000250.00",
+          "cobol_normalized": 100.0,
+          "java_normalized": 250.0,
+          "absolute_difference": 150.0,
+          "comparison_type": "monetary_tolerance",
+          "tolerance": 0.01
+        }
+      ]
+    },
+    {
+      "cluster_key": "net_pay::RULE-05::gross_bracket_2",
+      "cluster_method": "deterministic:field+rule+boundary_region",
+      "field": "net_pay",
+      "primary_rule_id": "RULE-05",
+      "boundary_region": "gross_bracket_2",
+      "affected_test_ids": [
+        "BND-006",
+        "BND-007",
+        "ITR-005"
+      ],
+      "divergence_count": 3,
+      "rule_ids": [
+        "RULE-05",
+        "RULE-06",
+        "RULE-07"
+      ],
+      "provenance": [
+        {
+          "rule_id": "RULE-05",
+          "source_file": "payroll.cbl",
+          "source_lines": [
+            192,
+            231
+          ],
+          "paragraph": "COMPUTE-FEDERAL-TAX",
+          "condition": "GROSS > 500.00 AND GROSS <= 1500.00",
+          "description": "Fed bracket 2: 500.00 < gross and gross <= 1500.00        -> rate 12%"
+        },
+        {
+          "rule_id": "RULE-06",
+          "source_file": "payroll.cbl",
+          "source_lines": [
+            192,
+            231
+          ],
+          "paragraph": "COMPUTE-FEDERAL-TAX",
+          "condition": "GROSS > 1500.00",
+          "description": "Fed bracket 3: gross > 1500.00         -> rate 22%"
+        },
+        {
+          "rule_id": "RULE-07",
+          "source_file": "payroll.cbl",
+          "source_lines": [
+            192,
+            231
+          ],
+          "paragraph": "COMPUTE-FEDERAL-TAX",
+          "condition": "ALWAYS (post-bracket calculation)",
+          "description": "Dependent allowance: $80 deducted from federal tax per dependent (max 5); minimum federal tax = 0"
+        }
+      ],
+      "explanation": "RULE: RULE-05\nCondition: GROSS > 500.00 AND GROSS <= 1500.00\nDescription: Fed bracket 2: 500.00 < gross and gross <= 1500.00        -> rate 12%\nAffected output field: net_pay\nAffected test cases: BND-006, BND-007, ITR-005\nMax absolute difference: 150.000000\nSource: payroll.cbl lines 192–231  [COMPUTE-FEDERAL-TAX]\nSource: payroll.cbl lines 192–231  [COMPUTE-FEDERAL-TAX]\nSource: payroll.cbl lines 192–231  [COMPUTE-FEDERAL-TAX]",
+      "members": [
+        {
+          "test_id": "BND-006",
+          "category": "boundary",
+          "input": {
+            "employee_id": "BND006",
+            "hours": "40.00",
+            "rate": "37.50",
+            "is_salaried": "N",
+            "salary": "0.00",
+            "dependents": 0
+          },
+          "boundary_region": "gross_bracket_2",
+          "rule_ids": [
+            "RULE-05",
+            "RULE-06"
+          ],
+          "provenance": [
+            {
+              "rule_id": "RULE-05",
+              "source_file": "payroll.cbl",
+              "source_lines": [
+                192,
+                231
+              ],
+              "paragraph": "COMPUTE-FEDERAL-TAX",
+              "condition": "GROSS > 500.00 AND GROSS <= 1500.00",
+              "description": "Fed bracket 2: 500.00 < gross and gross <= 1500.00        -> rate 12%"
+            },
+            {
+              "rule_id": "RULE-06",
+              "source_file": "payroll.cbl",
+              "source_lines": [
+                192,
+                231
+              ],
+              "paragraph": "COMPUTE-FEDERAL-TAX",
+              "condition": "GROSS > 1500.00",
+              "description": "Fed bracket 3: gross > 1500.00         -> rate 22%"
+            }
+          ],
+          "field": "net_pay",
+          "cobol_raw": "0001159.20",
+          "java_raw": "0001009.20",
+          "cobol_normalized": 1159.2,
+          "java_normalized": 1009.2,
+          "absolute_difference": 150.0,
+          "comparison_type": "monetary_tolerance",
+          "tolerance": 0.01
+        },
+        {
+          "test_id": "BND-007",
+          "category": "boundary",
+          "input": {
+            "employee_id": "BND007",
+            "hours": "0.00",
+            "rate": "0.00",
+            "is_salaried": "Y",
+            "salary": "1500.00",
+            "dependents": 0
+          },
+          "boundary_region": "gross_bracket_2",
+          "rule_ids": [
+            "RULE-05"
+          ],
+          "provenance": [
+            {
+              "rule_id": "RULE-05",
+              "source_file": "payroll.cbl",
+              "source_lines": [
+                192,
+                231
+              ],
+              "paragraph": "COMPUTE-FEDERAL-TAX",
+              "condition": "GROSS > 500.00 AND GROSS <= 1500.00",
+              "description": "Fed bracket 2: 500.00 < gross and gross <= 1500.00        -> rate 12%"
+            }
+          ],
+          "field": "net_pay",
+          "cobol_raw": "0001159.20",
+          "java_raw": "0001009.20",
+          "cobol_normalized": 1159.2,
+          "java_normalized": 1009.2,
+          "absolute_difference": 150.0,
+          "comparison_type": "monetary_tolerance",
+          "tolerance": 0.01
+        },
+        {
+          "test_id": "ITR-005",
+          "category": "interaction",
+          "input": {
+            "employee_id": "ITR005",
+            "hours": "40.00",
+            "rate": "37.50",
+            "is_salaried": "N",
+            "salary": "0.00",
+            "dependents": 1
+          },
+          "boundary_region": "gross_bracket_2",
+          "rule_ids": [
+            "RULE-05",
+            "RULE-07"
+          ],
+          "provenance": [
+            {
+              "rule_id": "RULE-05",
+              "source_file": "payroll.cbl",
+              "source_lines": [
+                192,
+                231
+              ],
+              "paragraph": "COMPUTE-FEDERAL-TAX",
+              "condition": "GROSS > 500.00 AND GROSS <= 1500.00",
+              "description": "Fed bracket 2: 500.00 < gross and gross <= 1500.00        -> rate 12%"
+            },
+            {
+              "rule_id": "RULE-07",
+              "source_file": "payroll.cbl",
+              "source_lines": [
+                192,
+                231
+              ],
+              "paragraph": "COMPUTE-FEDERAL-TAX",
+              "condition": "ALWAYS (post-bracket calculation)",
+              "description": "Dependent allowance: $80 deducted from federal tax per dependent (max 5); minimum federal tax = 0"
+            }
+          ],
+          "field": "net_pay",
+          "cobol_raw": "0001239.20",
+          "java_raw": "0001089.20",
+          "cobol_normalized": 1239.2,
+          "java_normalized": 1089.2,
+          "absolute_difference": 150.0,
+          "comparison_type": "monetary_tolerance",
+          "tolerance": 0.01
+        }
+      ]
+    }
+  ],
+  "per_test_results": [
+    {
+      "test_id": "ADV-001",
+      "category": "adversarial",
+      "input": {
+        "employee_id": "ADV001",
+        "hours": "0.00",
+        "rate": "0.00",
+        "is_salaried": "Y",
+        "salary": "781.92",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-08",
+        "RULE-11"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "ADV-002",
+      "category": "adversarial",
+      "input": {
+        "employee_id": "ADV002",
+        "hours": "0.00",
+        "rate": "0.00",
+        "is_salaried": "Y",
+        "salary": "800.04",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-05",
+        "RULE-11"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "ADV-003",
+      "category": "adversarial",
+      "input": {
+        "employee_id": "ADV003",
+        "hours": "0.00",
+        "rate": "0.00",
+        "is_salaried": "Y",
+        "salary": "400.05",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-04",
+        "RULE-11"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "ADV-004",
+      "category": "adversarial",
+      "input": {
+        "employee_id": "ADV004",
+        "hours": "0.00",
+        "rate": "0.00",
+        "is_salaried": "Y",
+        "salary": "1645.48",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-06",
+        "RULE-11"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "ADV-005",
+      "category": "adversarial",
+      "input": {
+        "employee_id": "ADV005",
+        "hours": "0.00",
+        "rate": "0.00",
+        "is_salaried": "Y",
+        "salary": "790.40",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-09",
+        "RULE-11"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "ADV-006",
+      "category": "adversarial",
+      "input": {
+        "employee_id": "ADV006",
+        "hours": "0.00",
+        "rate": "0.00",
+        "is_salaried": "Y",
+        "salary": "758.97",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-10",
+        "RULE-11"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "ADV-007",
+      "category": "adversarial",
+      "input": {
+        "employee_id": "ADV007",
+        "hours": "41.00",
+        "rate": "13.33",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-02",
+        "RULE-11"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "ADV-008",
+      "category": "adversarial",
+      "input": {
+        "employee_id": "ADV008",
+        "hours": "43.00",
+        "rate": "11.11",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-02",
+        "RULE-11"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "ADV-009",
+      "category": "adversarial",
+      "input": {
+        "employee_id": "ADV009",
+        "hours": "0.00",
+        "rate": "0.00",
+        "is_salaried": "Y",
+        "salary": "666.71",
+        "dependents": 1
+      },
+      "targeted_rule_ids": [
+        "RULE-05",
+        "RULE-07",
+        "RULE-11"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "ADV-010",
+      "category": "adversarial",
+      "input": {
+        "employee_id": "ADV010",
+        "hours": "0.00",
+        "rate": "0.00",
+        "is_salaried": "Y",
+        "salary": "3242.31",
+        "dependents": 2
+      },
+      "targeted_rule_ids": [
+        "RULE-07",
+        "RULE-09",
+        "RULE-11"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "BND-001",
+      "category": "boundary",
+      "input": {
+        "employee_id": "BND001",
+        "hours": "40.00",
+        "rate": "12.50",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-04",
+        "RULE-05"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "BND-002",
+      "category": "boundary",
+      "input": {
+        "employee_id": "BND002",
+        "hours": "40.00",
+        "rate": "12.51",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-05"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "BND-003",
+      "category": "boundary",
+      "input": {
+        "employee_id": "BND003",
+        "hours": "40.00",
+        "rate": "12.49",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-04"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "BND-004",
+      "category": "boundary",
+      "input": {
+        "employee_id": "BND004",
+        "hours": "0.00",
+        "rate": "0.00",
+        "is_salaried": "Y",
+        "salary": "500.00",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-04"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "BND-005",
+      "category": "boundary",
+      "input": {
+        "employee_id": "BND005",
+        "hours": "0.00",
+        "rate": "0.00",
+        "is_salaried": "Y",
+        "salary": "500.01",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-05"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "BND-006",
+      "category": "boundary",
+      "input": {
+        "employee_id": "BND006",
+        "hours": "40.00",
+        "rate": "37.50",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-05",
+        "RULE-06"
+      ],
+      "status": "DIVERGENT",
+      "field_mismatches": [
+        {
+          "test_id": "BND-006",
+          "category": "boundary",
+          "input": {
+            "employee_id": "BND006",
+            "hours": "40.00",
+            "rate": "37.50",
+            "is_salaried": "N",
+            "salary": "0.00",
+            "dependents": 0
+          },
+          "boundary_region": "gross_bracket_2",
+          "rule_ids": [
+            "RULE-05",
+            "RULE-06"
+          ],
+          "provenance": [
+            {
+              "rule_id": "RULE-05",
+              "source_file": "payroll.cbl",
+              "source_lines": [
+                192,
+                231
+              ],
+              "paragraph": "COMPUTE-FEDERAL-TAX",
+              "condition": "GROSS > 500.00 AND GROSS <= 1500.00",
+              "description": "Fed bracket 2: 500.00 < gross and gross <= 1500.00        -> rate 12%"
+            },
+            {
+              "rule_id": "RULE-06",
+              "source_file": "payroll.cbl",
+              "source_lines": [
+                192,
+                231
+              ],
+              "paragraph": "COMPUTE-FEDERAL-TAX",
+              "condition": "GROSS > 1500.00",
+              "description": "Fed bracket 3: gross > 1500.00         -> rate 22%"
+            }
+          ],
+          "field": "federal_tax",
+          "cobol_raw": "0000180.00",
+          "java_raw": "0000330.00",
+          "cobol_normalized": 180.0,
+          "java_normalized": 330.0,
+          "absolute_difference": 150.0,
+          "comparison_type": "monetary_tolerance",
+          "tolerance": 0.01
+        },
+        {
+          "test_id": "BND-006",
+          "category": "boundary",
+          "input": {
+            "employee_id": "BND006",
+            "hours": "40.00",
+            "rate": "37.50",
+            "is_salaried": "N",
+            "salary": "0.00",
+            "dependents": 0
+          },
+          "boundary_region": "gross_bracket_2",
+          "rule_ids": [
+            "RULE-05",
+            "RULE-06"
+          ],
+          "provenance": [
+            {
+              "rule_id": "RULE-05",
+              "source_file": "payroll.cbl",
+              "source_lines": [
+                192,
+                231
+              ],
+              "paragraph": "COMPUTE-FEDERAL-TAX",
+              "condition": "GROSS > 500.00 AND GROSS <= 1500.00",
+              "description": "Fed bracket 2: 500.00 < gross and gross <= 1500.00        -> rate 12%"
+            },
+            {
+              "rule_id": "RULE-06",
+              "source_file": "payroll.cbl",
+              "source_lines": [
+                192,
+                231
+              ],
+              "paragraph": "COMPUTE-FEDERAL-TAX",
+              "condition": "GROSS > 1500.00",
+              "description": "Fed bracket 3: gross > 1500.00         -> rate 22%"
+            }
+          ],
+          "field": "net_pay",
+          "cobol_raw": "0001159.20",
+          "java_raw": "0001009.20",
+          "cobol_normalized": 1159.2,
+          "java_normalized": 1009.2,
+          "absolute_difference": 150.0,
+          "comparison_type": "monetary_tolerance",
+          "tolerance": 0.01
+        }
+      ]
+    },
+    {
+      "test_id": "BND-007",
+      "category": "boundary",
+      "input": {
+        "employee_id": "BND007",
+        "hours": "0.00",
+        "rate": "0.00",
+        "is_salaried": "Y",
+        "salary": "1500.00",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-05"
+      ],
+      "status": "DIVERGENT",
+      "field_mismatches": [
+        {
+          "test_id": "BND-007",
+          "category": "boundary",
+          "input": {
+            "employee_id": "BND007",
+            "hours": "0.00",
+            "rate": "0.00",
+            "is_salaried": "Y",
+            "salary": "1500.00",
+            "dependents": 0
+          },
+          "boundary_region": "gross_bracket_2",
+          "rule_ids": [
+            "RULE-05"
+          ],
+          "provenance": [
+            {
+              "rule_id": "RULE-05",
+              "source_file": "payroll.cbl",
+              "source_lines": [
+                192,
+                231
+              ],
+              "paragraph": "COMPUTE-FEDERAL-TAX",
+              "condition": "GROSS > 500.00 AND GROSS <= 1500.00",
+              "description": "Fed bracket 2: 500.00 < gross and gross <= 1500.00        -> rate 12%"
+            }
+          ],
+          "field": "federal_tax",
+          "cobol_raw": "0000180.00",
+          "java_raw": "0000330.00",
+          "cobol_normalized": 180.0,
+          "java_normalized": 330.0,
+          "absolute_difference": 150.0,
+          "comparison_type": "monetary_tolerance",
+          "tolerance": 0.01
+        },
+        {
+          "test_id": "BND-007",
+          "category": "boundary",
+          "input": {
+            "employee_id": "BND007",
+            "hours": "0.00",
+            "rate": "0.00",
+            "is_salaried": "Y",
+            "salary": "1500.00",
+            "dependents": 0
+          },
+          "boundary_region": "gross_bracket_2",
+          "rule_ids": [
+            "RULE-05"
+          ],
+          "provenance": [
+            {
+              "rule_id": "RULE-05",
+              "source_file": "payroll.cbl",
+              "source_lines": [
+                192,
+                231
+              ],
+              "paragraph": "COMPUTE-FEDERAL-TAX",
+              "condition": "GROSS > 500.00 AND GROSS <= 1500.00",
+              "description": "Fed bracket 2: 500.00 < gross and gross <= 1500.00        -> rate 12%"
+            }
+          ],
+          "field": "net_pay",
+          "cobol_raw": "0001159.20",
+          "java_raw": "0001009.20",
+          "cobol_normalized": 1159.2,
+          "java_normalized": 1009.2,
+          "absolute_difference": 150.0,
+          "comparison_type": "monetary_tolerance",
+          "tolerance": 0.01
+        }
+      ]
+    },
+    {
+      "test_id": "BND-008",
+      "category": "boundary",
+      "input": {
+        "employee_id": "BND008",
+        "hours": "0.00",
+        "rate": "0.00",
+        "is_salaried": "Y",
+        "salary": "1499.99",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-05"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "BND-009",
+      "category": "boundary",
+      "input": {
+        "employee_id": "BND009",
+        "hours": "0.00",
+        "rate": "0.00",
+        "is_salaried": "Y",
+        "salary": "1500.01",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-06"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "BND-010",
+      "category": "boundary",
+      "input": {
+        "employee_id": "BND010",
+        "hours": "40.00",
+        "rate": "37.51",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-06"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "BND-011",
+      "category": "boundary",
+      "input": {
+        "employee_id": "BND011",
+        "hours": "40.00",
+        "rate": "20.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-01"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "BND-012",
+      "category": "boundary",
+      "input": {
+        "employee_id": "BND012",
+        "hours": "40.01",
+        "rate": "20.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-02"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "BND-013",
+      "category": "boundary",
+      "input": {
+        "employee_id": "BND013",
+        "hours": "39.99",
+        "rate": "20.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-01"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "BND-014",
+      "category": "boundary",
+      "input": {
+        "employee_id": "BND014",
+        "hours": "168.00",
+        "rate": "10.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-14",
+        "RULE-02"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "BND-015",
+      "category": "boundary",
+      "input": {
+        "employee_id": "BND015",
+        "hours": "40.00",
+        "rate": "7.25",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-13"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "BND-016",
+      "category": "boundary",
+      "input": {
+        "employee_id": "BND016",
+        "hours": "40.00",
+        "rate": "7.24",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-13"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "BND-017",
+      "category": "boundary",
+      "input": {
+        "employee_id": "BND017",
+        "hours": "40.00",
+        "rate": "7.26",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-13",
+        "RULE-01"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "BND-018",
+      "category": "boundary",
+      "input": {
+        "employee_id": "BND018",
+        "hours": "0.00",
+        "rate": "0.00",
+        "is_salaried": "Y",
+        "salary": "3242.31",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-09"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "BND-019",
+      "category": "boundary",
+      "input": {
+        "employee_id": "BND019",
+        "hours": "0.00",
+        "rate": "0.00",
+        "is_salaried": "Y",
+        "salary": "3242.32",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-09"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "BND-020",
+      "category": "boundary",
+      "input": {
+        "employee_id": "BND020",
+        "hours": "0.00",
+        "rate": "0.00",
+        "is_salaried": "Y",
+        "salary": "3242.30",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-09"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "ERR-001",
+      "category": "error",
+      "input": {
+        "employee_id": "ERR001",
+        "hours": "168.01",
+        "rate": "10.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-14"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "ERR-002",
+      "category": "error",
+      "input": {
+        "employee_id": "ERR002",
+        "hours": "200.00",
+        "rate": "20.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-14"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "ERR-003",
+      "category": "error",
+      "input": {
+        "employee_id": "ERR003",
+        "hours": "999.99",
+        "rate": "10.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-14"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "ERR-004",
+      "category": "error",
+      "input": {
+        "employee_id": "ERR004",
+        "hours": "169.00",
+        "rate": "15.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 2
+      },
+      "targeted_rule_ids": [
+        "RULE-14"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "ERR-005",
+      "category": "error",
+      "input": {
+        "employee_id": "ERR005",
+        "hours": "40.00",
+        "rate": "7.24",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-13"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "ERR-006",
+      "category": "error",
+      "input": {
+        "employee_id": "ERR006",
+        "hours": "40.00",
+        "rate": "5.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-13"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "ERR-007",
+      "category": "error",
+      "input": {
+        "employee_id": "ERR007",
+        "hours": "40.00",
+        "rate": "0.01",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-13"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "ERR-008",
+      "category": "error",
+      "input": {
+        "employee_id": "ERR008",
+        "hours": "40.00",
+        "rate": "7.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 3
+      },
+      "targeted_rule_ids": [
+        "RULE-13"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "ITR-001",
+      "category": "interaction",
+      "input": {
+        "employee_id": "ITR001",
+        "hours": "10.00",
+        "rate": "10.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 1
+      },
+      "targeted_rule_ids": [
+        "RULE-04",
+        "RULE-07"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "ITR-002",
+      "category": "interaction",
+      "input": {
+        "employee_id": "ITR002",
+        "hours": "40.00",
+        "rate": "12.50",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 1
+      },
+      "targeted_rule_ids": [
+        "RULE-04",
+        "RULE-07"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "ITR-003",
+      "category": "interaction",
+      "input": {
+        "employee_id": "ITR003",
+        "hours": "40.00",
+        "rate": "20.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 1
+      },
+      "targeted_rule_ids": [
+        "RULE-05",
+        "RULE-07"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "ITR-004",
+      "category": "interaction",
+      "input": {
+        "employee_id": "ITR004",
+        "hours": "40.00",
+        "rate": "20.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 2
+      },
+      "targeted_rule_ids": [
+        "RULE-05",
+        "RULE-07"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "ITR-005",
+      "category": "interaction",
+      "input": {
+        "employee_id": "ITR005",
+        "hours": "40.00",
+        "rate": "37.50",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 1
+      },
+      "targeted_rule_ids": [
+        "RULE-05",
+        "RULE-07"
+      ],
+      "status": "DIVERGENT",
+      "field_mismatches": [
+        {
+          "test_id": "ITR-005",
+          "category": "interaction",
+          "input": {
+            "employee_id": "ITR005",
+            "hours": "40.00",
+            "rate": "37.50",
+            "is_salaried": "N",
+            "salary": "0.00",
+            "dependents": 1
+          },
+          "boundary_region": "gross_bracket_2",
+          "rule_ids": [
+            "RULE-05",
+            "RULE-07"
+          ],
+          "provenance": [
+            {
+              "rule_id": "RULE-05",
+              "source_file": "payroll.cbl",
+              "source_lines": [
+                192,
+                231
+              ],
+              "paragraph": "COMPUTE-FEDERAL-TAX",
+              "condition": "GROSS > 500.00 AND GROSS <= 1500.00",
+              "description": "Fed bracket 2: 500.00 < gross and gross <= 1500.00        -> rate 12%"
+            },
+            {
+              "rule_id": "RULE-07",
+              "source_file": "payroll.cbl",
+              "source_lines": [
+                192,
+                231
+              ],
+              "paragraph": "COMPUTE-FEDERAL-TAX",
+              "condition": "ALWAYS (post-bracket calculation)",
+              "description": "Dependent allowance: $80 deducted from federal tax per dependent (max 5); minimum federal tax = 0"
+            }
+          ],
+          "field": "federal_tax",
+          "cobol_raw": "0000100.00",
+          "java_raw": "0000250.00",
+          "cobol_normalized": 100.0,
+          "java_normalized": 250.0,
+          "absolute_difference": 150.0,
+          "comparison_type": "monetary_tolerance",
+          "tolerance": 0.01
+        },
+        {
+          "test_id": "ITR-005",
+          "category": "interaction",
+          "input": {
+            "employee_id": "ITR005",
+            "hours": "40.00",
+            "rate": "37.50",
+            "is_salaried": "N",
+            "salary": "0.00",
+            "dependents": 1
+          },
+          "boundary_region": "gross_bracket_2",
+          "rule_ids": [
+            "RULE-05",
+            "RULE-07"
+          ],
+          "provenance": [
+            {
+              "rule_id": "RULE-05",
+              "source_file": "payroll.cbl",
+              "source_lines": [
+                192,
+                231
+              ],
+              "paragraph": "COMPUTE-FEDERAL-TAX",
+              "condition": "GROSS > 500.00 AND GROSS <= 1500.00",
+              "description": "Fed bracket 2: 500.00 < gross and gross <= 1500.00        -> rate 12%"
+            },
+            {
+              "rule_id": "RULE-07",
+              "source_file": "payroll.cbl",
+              "source_lines": [
+                192,
+                231
+              ],
+              "paragraph": "COMPUTE-FEDERAL-TAX",
+              "condition": "ALWAYS (post-bracket calculation)",
+              "description": "Dependent allowance: $80 deducted from federal tax per dependent (max 5); minimum federal tax = 0"
+            }
+          ],
+          "field": "net_pay",
+          "cobol_raw": "0001239.20",
+          "java_raw": "0001089.20",
+          "cobol_normalized": 1239.2,
+          "java_normalized": 1089.2,
+          "absolute_difference": 150.0,
+          "comparison_type": "monetary_tolerance",
+          "tolerance": 0.01
+        }
+      ]
+    },
+    {
+      "test_id": "ITR-006",
+      "category": "interaction",
+      "input": {
+        "employee_id": "ITR006",
+        "hours": "40.00",
+        "rate": "37.50",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 5
+      },
+      "targeted_rule_ids": [
+        "RULE-05",
+        "RULE-07",
+        "RULE-15"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "ITR-007",
+      "category": "interaction",
+      "input": {
+        "employee_id": "ITR007",
+        "hours": "40.00",
+        "rate": "50.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 1
+      },
+      "targeted_rule_ids": [
+        "RULE-06",
+        "RULE-07"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "ITR-008",
+      "category": "interaction",
+      "input": {
+        "employee_id": "ITR008",
+        "hours": "40.00",
+        "rate": "50.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 5
+      },
+      "targeted_rule_ids": [
+        "RULE-06",
+        "RULE-07",
+        "RULE-15"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "ITR-009",
+      "category": "interaction",
+      "input": {
+        "employee_id": "ITR009",
+        "hours": "44.00",
+        "rate": "33.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-02",
+        "RULE-05",
+        "RULE-06"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "ITR-010",
+      "category": "interaction",
+      "input": {
+        "employee_id": "ITR010",
+        "hours": "41.00",
+        "rate": "36.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-02",
+        "RULE-05"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "ITR-011",
+      "category": "interaction",
+      "input": {
+        "employee_id": "ITR011",
+        "hours": "40.00",
+        "rate": "90.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-06",
+        "RULE-09"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "ITR-012",
+      "category": "interaction",
+      "input": {
+        "employee_id": "ITR012",
+        "hours": "168.00",
+        "rate": "25.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-02",
+        "RULE-06",
+        "RULE-09"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "ITR-013",
+      "category": "interaction",
+      "input": {
+        "employee_id": "ITR013",
+        "hours": "40.00",
+        "rate": "50.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 5
+      },
+      "targeted_rule_ids": [
+        "RULE-06",
+        "RULE-07",
+        "RULE-15"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "ITR-014",
+      "category": "interaction",
+      "input": {
+        "employee_id": "ITR014",
+        "hours": "40.00",
+        "rate": "50.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 6
+      },
+      "targeted_rule_ids": [
+        "RULE-06",
+        "RULE-07",
+        "RULE-15"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "ITR-015",
+      "category": "interaction",
+      "input": {
+        "employee_id": "ITR015",
+        "hours": "0.00",
+        "rate": "0.00",
+        "is_salaried": "Y",
+        "salary": "10.00",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-03",
+        "RULE-04",
+        "RULE-12"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "ITR-016",
+      "category": "interaction",
+      "input": {
+        "employee_id": "ITR016",
+        "hours": "0.00",
+        "rate": "0.00",
+        "is_salaried": "Y",
+        "salary": "2000.00",
+        "dependents": 6
+      },
+      "targeted_rule_ids": [
+        "RULE-03",
+        "RULE-06",
+        "RULE-07",
+        "RULE-15"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "NRM-001",
+      "category": "normal",
+      "input": {
+        "employee_id": "NRM001",
+        "hours": "40.00",
+        "rate": "10.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-01",
+        "RULE-04"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "NRM-002",
+      "category": "normal",
+      "input": {
+        "employee_id": "NRM002",
+        "hours": "35.00",
+        "rate": "10.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-01",
+        "RULE-04"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "NRM-003",
+      "category": "normal",
+      "input": {
+        "employee_id": "NRM003",
+        "hours": "40.00",
+        "rate": "20.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-01",
+        "RULE-05"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "NRM-004",
+      "category": "normal",
+      "input": {
+        "employee_id": "NRM004",
+        "hours": "40.00",
+        "rate": "30.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-01",
+        "RULE-05"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "NRM-005",
+      "category": "normal",
+      "input": {
+        "employee_id": "NRM005",
+        "hours": "40.00",
+        "rate": "50.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-01",
+        "RULE-06"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "NRM-006",
+      "category": "normal",
+      "input": {
+        "employee_id": "NRM006",
+        "hours": "40.00",
+        "rate": "100.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-01",
+        "RULE-06",
+        "RULE-09"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "NRM-007",
+      "category": "normal",
+      "input": {
+        "employee_id": "NRM007",
+        "hours": "45.00",
+        "rate": "20.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-02",
+        "RULE-05"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "NRM-008",
+      "category": "normal",
+      "input": {
+        "employee_id": "NRM008",
+        "hours": "50.00",
+        "rate": "20.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-02",
+        "RULE-05"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "NRM-009",
+      "category": "normal",
+      "input": {
+        "employee_id": "NRM009",
+        "hours": "60.00",
+        "rate": "30.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-02",
+        "RULE-06"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "NRM-010",
+      "category": "normal",
+      "input": {
+        "employee_id": "NRM010",
+        "hours": "0.00",
+        "rate": "0.00",
+        "is_salaried": "Y",
+        "salary": "500.00",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-03",
+        "RULE-04"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "NRM-011",
+      "category": "normal",
+      "input": {
+        "employee_id": "NRM011",
+        "hours": "0.00",
+        "rate": "0.00",
+        "is_salaried": "Y",
+        "salary": "1000.00",
+        "dependents": 2
+      },
+      "targeted_rule_ids": [
+        "RULE-03",
+        "RULE-05",
+        "RULE-07"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "NRM-012",
+      "category": "normal",
+      "input": {
+        "employee_id": "NRM012",
+        "hours": "0.00",
+        "rate": "0.00",
+        "is_salaried": "Y",
+        "salary": "2000.00",
+        "dependents": 3
+      },
+      "targeted_rule_ids": [
+        "RULE-03",
+        "RULE-06",
+        "RULE-07"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "NRM-013",
+      "category": "normal",
+      "input": {
+        "employee_id": "NRM013",
+        "hours": "0.00",
+        "rate": "0.00",
+        "is_salaried": "Y",
+        "salary": "5000.00",
+        "dependents": 0
+      },
+      "targeted_rule_ids": [
+        "RULE-03",
+        "RULE-06",
+        "RULE-09"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "NRM-014",
+      "category": "normal",
+      "input": {
+        "employee_id": "NRM014",
+        "hours": "40.00",
+        "rate": "20.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 1
+      },
+      "targeted_rule_ids": [
+        "RULE-05",
+        "RULE-07"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "NRM-015",
+      "category": "normal",
+      "input": {
+        "employee_id": "NRM015",
+        "hours": "40.00",
+        "rate": "20.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 3
+      },
+      "targeted_rule_ids": [
+        "RULE-05",
+        "RULE-07"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    },
+    {
+      "test_id": "NRM-016",
+      "category": "normal",
+      "input": {
+        "employee_id": "NRM016",
+        "hours": "40.00",
+        "rate": "20.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 5
+      },
+      "targeted_rule_ids": [
+        "RULE-05",
+        "RULE-07",
+        "RULE-15"
+      ],
+      "status": "MATCH",
+      "field_mismatches": []
+    }
+  ]
+}

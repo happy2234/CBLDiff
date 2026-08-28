@@ -1,0 +1,1268 @@
+{
+  "schema_version": "1.0",
+  "generated_by": "cbldiff/test_synthesizer.py",
+  "random_seed": 42,
+  "rules_source": "rules.json",
+  "test_count": 70,
+  "counts_by_category": {
+    "boundary": 20,
+    "normal": 16,
+    "error": 8,
+    "interaction": 16,
+    "adversarial": 10
+  },
+  "test_cases": [
+    {
+      "test_id": "BND-001",
+      "category": "boundary",
+      "input": {
+        "employee_id": "BND001",
+        "hours": "40.00",
+        "rate": "12.50",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "pipe_input": "BND001|40.00|12.50|N|0.00|0",
+      "targeted_rule_ids": [
+        "RULE-04",
+        "RULE-05"
+      ],
+      "rationale": "gross = 500.00 exactly \u2014 upper limit of bracket 1 (must use 10% rate, NOT 12%)"
+    },
+    {
+      "test_id": "BND-002",
+      "category": "boundary",
+      "input": {
+        "employee_id": "BND002",
+        "hours": "40.00",
+        "rate": "12.51",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "pipe_input": "BND002|40.00|12.51|N|0.00|0",
+      "targeted_rule_ids": [
+        "RULE-05"
+      ],
+      "rationale": "gross = 500.40 (40*12.51) \u2014 just above bracket 1 top; bracket 2 at 12%"
+    },
+    {
+      "test_id": "BND-003",
+      "category": "boundary",
+      "input": {
+        "employee_id": "BND003",
+        "hours": "40.00",
+        "rate": "12.49",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "pipe_input": "BND003|40.00|12.49|N|0.00|0",
+      "targeted_rule_ids": [
+        "RULE-04"
+      ],
+      "rationale": "gross = 499.60 (40*12.49) \u2014 just below bracket 1 top; solidly bracket 1 at 10%"
+    },
+    {
+      "test_id": "BND-004",
+      "category": "boundary",
+      "input": {
+        "employee_id": "BND004",
+        "hours": "0.00",
+        "rate": "0.00",
+        "is_salaried": "Y",
+        "salary": "500.00",
+        "dependents": 0
+      },
+      "pipe_input": "BND004|0.00|0.00|Y|500.00|0",
+      "targeted_rule_ids": [
+        "RULE-04"
+      ],
+      "rationale": "salaried gross = 500.00 exactly \u2014 bracket 1 upper limit, 10% rate"
+    },
+    {
+      "test_id": "BND-005",
+      "category": "boundary",
+      "input": {
+        "employee_id": "BND005",
+        "hours": "0.00",
+        "rate": "0.00",
+        "is_salaried": "Y",
+        "salary": "500.01",
+        "dependents": 0
+      },
+      "pipe_input": "BND005|0.00|0.00|Y|500.01|0",
+      "targeted_rule_ids": [
+        "RULE-05"
+      ],
+      "rationale": "salaried gross = 500.01 \u2014 crosses into bracket 2 at 12%"
+    },
+    {
+      "test_id": "BND-006",
+      "category": "boundary",
+      "input": {
+        "employee_id": "BND006",
+        "hours": "40.00",
+        "rate": "37.50",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "pipe_input": "BND006|40.00|37.50|N|0.00|0",
+      "targeted_rule_ids": [
+        "RULE-05",
+        "RULE-06"
+      ],
+      "rationale": "gross = 1500.00 exactly (40*37.50) \u2014 upper limit of bracket 2 (must use 12%, NOT 22%)"
+    },
+    {
+      "test_id": "BND-007",
+      "category": "boundary",
+      "input": {
+        "employee_id": "BND007",
+        "hours": "0.00",
+        "rate": "0.00",
+        "is_salaried": "Y",
+        "salary": "1500.00",
+        "dependents": 0
+      },
+      "pipe_input": "BND007|0.00|0.00|Y|1500.00|0",
+      "targeted_rule_ids": [
+        "RULE-05"
+      ],
+      "rationale": "salaried gross = 1500.00 exactly \u2014 bracket 2 upper boundary, must use 12%"
+    },
+    {
+      "test_id": "BND-008",
+      "category": "boundary",
+      "input": {
+        "employee_id": "BND008",
+        "hours": "0.00",
+        "rate": "0.00",
+        "is_salaried": "Y",
+        "salary": "1499.99",
+        "dependents": 0
+      },
+      "pipe_input": "BND008|0.00|0.00|Y|1499.99|0",
+      "targeted_rule_ids": [
+        "RULE-05"
+      ],
+      "rationale": "salaried gross = 1499.99 \u2014 just below bracket 2 top, still 12%"
+    },
+    {
+      "test_id": "BND-009",
+      "category": "boundary",
+      "input": {
+        "employee_id": "BND009",
+        "hours": "0.00",
+        "rate": "0.00",
+        "is_salaried": "Y",
+        "salary": "1500.01",
+        "dependents": 0
+      },
+      "pipe_input": "BND009|0.00|0.00|Y|1500.01|0",
+      "targeted_rule_ids": [
+        "RULE-06"
+      ],
+      "rationale": "salaried gross = 1500.01 \u2014 first cent into bracket 3 at 22%"
+    },
+    {
+      "test_id": "BND-010",
+      "category": "boundary",
+      "input": {
+        "employee_id": "BND010",
+        "hours": "40.00",
+        "rate": "37.51",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "pipe_input": "BND010|40.00|37.51|N|0.00|0",
+      "targeted_rule_ids": [
+        "RULE-06"
+      ],
+      "rationale": "gross = 1500.40 (40*37.51) \u2014 just above bracket 2/3 boundary, must use 22%"
+    },
+    {
+      "test_id": "BND-011",
+      "category": "boundary",
+      "input": {
+        "employee_id": "BND011",
+        "hours": "40.00",
+        "rate": "20.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "pipe_input": "BND011|40.00|20.00|N|0.00|0",
+      "targeted_rule_ids": [
+        "RULE-01"
+      ],
+      "rationale": "hours = 40.00 exactly \u2014 OT threshold; straight-time only (not OT)"
+    },
+    {
+      "test_id": "BND-012",
+      "category": "boundary",
+      "input": {
+        "employee_id": "BND012",
+        "hours": "40.01",
+        "rate": "20.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "pipe_input": "BND012|40.01|20.00|N|0.00|0",
+      "targeted_rule_ids": [
+        "RULE-02"
+      ],
+      "rationale": "hours = 40.01 \u2014 one hundredth of an hour into OT; triggers 1.5x rate"
+    },
+    {
+      "test_id": "BND-013",
+      "category": "boundary",
+      "input": {
+        "employee_id": "BND013",
+        "hours": "39.99",
+        "rate": "20.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "pipe_input": "BND013|39.99|20.00|N|0.00|0",
+      "targeted_rule_ids": [
+        "RULE-01"
+      ],
+      "rationale": "hours = 39.99 \u2014 just below OT threshold; pure straight-time"
+    },
+    {
+      "test_id": "BND-014",
+      "category": "boundary",
+      "input": {
+        "employee_id": "BND014",
+        "hours": "168.00",
+        "rate": "10.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "pipe_input": "BND014|168.00|10.00|N|0.00|0",
+      "targeted_rule_ids": [
+        "RULE-14",
+        "RULE-02"
+      ],
+      "rationale": "hours = 168.00 exactly \u2014 max allowed hours; valid, all OT above 40"
+    },
+    {
+      "test_id": "BND-015",
+      "category": "boundary",
+      "input": {
+        "employee_id": "BND015",
+        "hours": "40.00",
+        "rate": "7.25",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "pipe_input": "BND015|40.00|7.25|N|0.00|0",
+      "targeted_rule_ids": [
+        "RULE-13"
+      ],
+      "rationale": "rate = 7.25 exactly \u2014 minimum wage floor; valid (not below threshold)"
+    },
+    {
+      "test_id": "BND-016",
+      "category": "boundary",
+      "input": {
+        "employee_id": "BND016",
+        "hours": "40.00",
+        "rate": "7.24",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "pipe_input": "BND016|40.00|7.24|N|0.00|0",
+      "targeted_rule_ids": [
+        "RULE-13"
+      ],
+      "rationale": "rate = 7.24 \u2014 one cent below minimum wage; must trigger ERR_MIN_WAGE"
+    },
+    {
+      "test_id": "BND-017",
+      "category": "boundary",
+      "input": {
+        "employee_id": "BND017",
+        "hours": "40.00",
+        "rate": "7.26",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "pipe_input": "BND017|40.00|7.26|N|0.00|0",
+      "targeted_rule_ids": [
+        "RULE-13",
+        "RULE-01"
+      ],
+      "rationale": "rate = 7.26 \u2014 one cent above minimum wage; valid"
+    },
+    {
+      "test_id": "BND-018",
+      "category": "boundary",
+      "input": {
+        "employee_id": "BND018",
+        "hours": "0.00",
+        "rate": "0.00",
+        "is_salaried": "Y",
+        "salary": "3242.31",
+        "dependents": 0
+      },
+      "pipe_input": "BND018|0.00|0.00|Y|3242.31|0",
+      "targeted_rule_ids": [
+        "RULE-09"
+      ],
+      "rationale": "salaried gross = 3242.31 exactly \u2014 SS cap boundary; SS = 3242.31 * 0.062"
+    },
+    {
+      "test_id": "BND-019",
+      "category": "boundary",
+      "input": {
+        "employee_id": "BND019",
+        "hours": "0.00",
+        "rate": "0.00",
+        "is_salaried": "Y",
+        "salary": "3242.32",
+        "dependents": 0
+      },
+      "pipe_input": "BND019|0.00|0.00|Y|3242.32|0",
+      "targeted_rule_ids": [
+        "RULE-09"
+      ],
+      "rationale": "salaried gross = 3242.32 \u2014 one cent above SS cap; SS still capped at 3242.31 * 0.062"
+    },
+    {
+      "test_id": "BND-020",
+      "category": "boundary",
+      "input": {
+        "employee_id": "BND020",
+        "hours": "0.00",
+        "rate": "0.00",
+        "is_salaried": "Y",
+        "salary": "3242.30",
+        "dependents": 0
+      },
+      "pipe_input": "BND020|0.00|0.00|Y|3242.30|0",
+      "targeted_rule_ids": [
+        "RULE-09"
+      ],
+      "rationale": "salaried gross = 3242.30 \u2014 one cent below SS cap; SS = 3242.30 * 0.062"
+    },
+    {
+      "test_id": "NRM-001",
+      "category": "normal",
+      "input": {
+        "employee_id": "NRM001",
+        "hours": "40.00",
+        "rate": "10.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "pipe_input": "NRM001|40.00|10.00|N|0.00|0",
+      "targeted_rule_ids": [
+        "RULE-01",
+        "RULE-04"
+      ],
+      "rationale": "40h @ $10/h = gross 400; bracket 1 (10%)"
+    },
+    {
+      "test_id": "NRM-002",
+      "category": "normal",
+      "input": {
+        "employee_id": "NRM002",
+        "hours": "35.00",
+        "rate": "10.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "pipe_input": "NRM002|35.00|10.00|N|0.00|0",
+      "targeted_rule_ids": [
+        "RULE-01",
+        "RULE-04"
+      ],
+      "rationale": "35h @ $10 = gross 350; well inside bracket 1"
+    },
+    {
+      "test_id": "NRM-003",
+      "category": "normal",
+      "input": {
+        "employee_id": "NRM003",
+        "hours": "40.00",
+        "rate": "20.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "pipe_input": "NRM003|40.00|20.00|N|0.00|0",
+      "targeted_rule_ids": [
+        "RULE-01",
+        "RULE-05"
+      ],
+      "rationale": "40h @ $20 = gross 800; bracket 2 (12%)"
+    },
+    {
+      "test_id": "NRM-004",
+      "category": "normal",
+      "input": {
+        "employee_id": "NRM004",
+        "hours": "40.00",
+        "rate": "30.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "pipe_input": "NRM004|40.00|30.00|N|0.00|0",
+      "targeted_rule_ids": [
+        "RULE-01",
+        "RULE-05"
+      ],
+      "rationale": "40h @ $30 = gross 1200; mid-range bracket 2"
+    },
+    {
+      "test_id": "NRM-005",
+      "category": "normal",
+      "input": {
+        "employee_id": "NRM005",
+        "hours": "40.00",
+        "rate": "50.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "pipe_input": "NRM005|40.00|50.00|N|0.00|0",
+      "targeted_rule_ids": [
+        "RULE-01",
+        "RULE-06"
+      ],
+      "rationale": "40h @ $50 = gross 2000; bracket 3 (22%)"
+    },
+    {
+      "test_id": "NRM-006",
+      "category": "normal",
+      "input": {
+        "employee_id": "NRM006",
+        "hours": "40.00",
+        "rate": "100.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "pipe_input": "NRM006|40.00|100.00|N|0.00|0",
+      "targeted_rule_ids": [
+        "RULE-01",
+        "RULE-06",
+        "RULE-09"
+      ],
+      "rationale": "40h @ $100 = gross 4000; bracket 3 + SS cap triggered"
+    },
+    {
+      "test_id": "NRM-007",
+      "category": "normal",
+      "input": {
+        "employee_id": "NRM007",
+        "hours": "45.00",
+        "rate": "20.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "pipe_input": "NRM007|45.00|20.00|N|0.00|0",
+      "targeted_rule_ids": [
+        "RULE-02",
+        "RULE-05"
+      ],
+      "rationale": "45h OT @ $20: 40*20 + 5*30 = 950; bracket 2"
+    },
+    {
+      "test_id": "NRM-008",
+      "category": "normal",
+      "input": {
+        "employee_id": "NRM008",
+        "hours": "50.00",
+        "rate": "20.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "pipe_input": "NRM008|50.00|20.00|N|0.00|0",
+      "targeted_rule_ids": [
+        "RULE-02",
+        "RULE-05"
+      ],
+      "rationale": "50h OT @ $20: 40*20 + 10*30 = 1100; bracket 2"
+    },
+    {
+      "test_id": "NRM-009",
+      "category": "normal",
+      "input": {
+        "employee_id": "NRM009",
+        "hours": "60.00",
+        "rate": "30.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "pipe_input": "NRM009|60.00|30.00|N|0.00|0",
+      "targeted_rule_ids": [
+        "RULE-02",
+        "RULE-06"
+      ],
+      "rationale": "60h OT @ $30: 40*30 + 20*45 = 2100; bracket 3"
+    },
+    {
+      "test_id": "NRM-010",
+      "category": "normal",
+      "input": {
+        "employee_id": "NRM010",
+        "hours": "0.00",
+        "rate": "0.00",
+        "is_salaried": "Y",
+        "salary": "500.00",
+        "dependents": 0
+      },
+      "pipe_input": "NRM010|0.00|0.00|Y|500.00|0",
+      "targeted_rule_ids": [
+        "RULE-03",
+        "RULE-04"
+      ],
+      "rationale": "salaried $500/wk; bracket 1 (10%)"
+    },
+    {
+      "test_id": "NRM-011",
+      "category": "normal",
+      "input": {
+        "employee_id": "NRM011",
+        "hours": "0.00",
+        "rate": "0.00",
+        "is_salaried": "Y",
+        "salary": "1000.00",
+        "dependents": 2
+      },
+      "pipe_input": "NRM011|0.00|0.00|Y|1000.00|2",
+      "targeted_rule_ids": [
+        "RULE-03",
+        "RULE-05",
+        "RULE-07"
+      ],
+      "rationale": "salaried $1000/wk, 2 deps; bracket 2, dep allowance = 160"
+    },
+    {
+      "test_id": "NRM-012",
+      "category": "normal",
+      "input": {
+        "employee_id": "NRM012",
+        "hours": "0.00",
+        "rate": "0.00",
+        "is_salaried": "Y",
+        "salary": "2000.00",
+        "dependents": 3
+      },
+      "pipe_input": "NRM012|0.00|0.00|Y|2000.00|3",
+      "targeted_rule_ids": [
+        "RULE-03",
+        "RULE-06",
+        "RULE-07"
+      ],
+      "rationale": "salaried $2000/wk, 3 deps; bracket 3; dep allowance = 240"
+    },
+    {
+      "test_id": "NRM-013",
+      "category": "normal",
+      "input": {
+        "employee_id": "NRM013",
+        "hours": "0.00",
+        "rate": "0.00",
+        "is_salaried": "Y",
+        "salary": "5000.00",
+        "dependents": 0
+      },
+      "pipe_input": "NRM013|0.00|0.00|Y|5000.00|0",
+      "targeted_rule_ids": [
+        "RULE-03",
+        "RULE-06",
+        "RULE-09"
+      ],
+      "rationale": "high salaried $5000/wk; bracket 3 + SS capped"
+    },
+    {
+      "test_id": "NRM-014",
+      "category": "normal",
+      "input": {
+        "employee_id": "NRM014",
+        "hours": "40.00",
+        "rate": "20.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 1
+      },
+      "pipe_input": "NRM014|40.00|20.00|N|0.00|1",
+      "targeted_rule_ids": [
+        "RULE-05",
+        "RULE-07"
+      ],
+      "rationale": "gross 800, 1 dep; federal = 800*0.12 - 80 = 16.00"
+    },
+    {
+      "test_id": "NRM-015",
+      "category": "normal",
+      "input": {
+        "employee_id": "NRM015",
+        "hours": "40.00",
+        "rate": "20.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 3
+      },
+      "pipe_input": "NRM015|40.00|20.00|N|0.00|3",
+      "targeted_rule_ids": [
+        "RULE-05",
+        "RULE-07"
+      ],
+      "rationale": "gross 800, 3 deps; federal = 96 - 240 < 0 \u2192 0"
+    },
+    {
+      "test_id": "NRM-016",
+      "category": "normal",
+      "input": {
+        "employee_id": "NRM016",
+        "hours": "40.00",
+        "rate": "20.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 5
+      },
+      "pipe_input": "NRM016|40.00|20.00|N|0.00|5",
+      "targeted_rule_ids": [
+        "RULE-05",
+        "RULE-07",
+        "RULE-15"
+      ],
+      "rationale": "gross 800, 5 deps (max); federal = 96 - 400 < 0 \u2192 0"
+    },
+    {
+      "test_id": "ERR-001",
+      "category": "error",
+      "input": {
+        "employee_id": "ERR001",
+        "hours": "168.01",
+        "rate": "10.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "pipe_input": "ERR001|168.01|10.00|N|0.00|0",
+      "targeted_rule_ids": [
+        "RULE-14"
+      ],
+      "rationale": "hours = 168.01 \u2014 one hundredth over max; must produce ERR_HOURS"
+    },
+    {
+      "test_id": "ERR-002",
+      "category": "error",
+      "input": {
+        "employee_id": "ERR002",
+        "hours": "200.00",
+        "rate": "20.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "pipe_input": "ERR002|200.00|20.00|N|0.00|0",
+      "targeted_rule_ids": [
+        "RULE-14"
+      ],
+      "rationale": "hours = 200 \u2014 clearly over 168; ERR_HOURS"
+    },
+    {
+      "test_id": "ERR-003",
+      "category": "error",
+      "input": {
+        "employee_id": "ERR003",
+        "hours": "999.99",
+        "rate": "10.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "pipe_input": "ERR003|999.99|10.00|N|0.00|0",
+      "targeted_rule_ids": [
+        "RULE-14"
+      ],
+      "rationale": "hours = 999.99 \u2014 extreme over-hours; ERR_HOURS"
+    },
+    {
+      "test_id": "ERR-004",
+      "category": "error",
+      "input": {
+        "employee_id": "ERR004",
+        "hours": "169.00",
+        "rate": "15.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 2
+      },
+      "pipe_input": "ERR004|169.00|15.00|N|0.00|2",
+      "targeted_rule_ids": [
+        "RULE-14"
+      ],
+      "rationale": "hours = 169 with dependents; ERR_HOURS regardless of deps"
+    },
+    {
+      "test_id": "ERR-005",
+      "category": "error",
+      "input": {
+        "employee_id": "ERR005",
+        "hours": "40.00",
+        "rate": "7.24",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "pipe_input": "ERR005|40.00|7.24|N|0.00|0",
+      "targeted_rule_ids": [
+        "RULE-13"
+      ],
+      "rationale": "rate = 7.24 \u2014 below $7.25 min wage; ERR_MIN_WAGE"
+    },
+    {
+      "test_id": "ERR-006",
+      "category": "error",
+      "input": {
+        "employee_id": "ERR006",
+        "hours": "40.00",
+        "rate": "5.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "pipe_input": "ERR006|40.00|5.00|N|0.00|0",
+      "targeted_rule_ids": [
+        "RULE-13"
+      ],
+      "rationale": "rate = 5.00 \u2014 well below min wage; ERR_MIN_WAGE"
+    },
+    {
+      "test_id": "ERR-007",
+      "category": "error",
+      "input": {
+        "employee_id": "ERR007",
+        "hours": "40.00",
+        "rate": "0.01",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "pipe_input": "ERR007|40.00|0.01|N|0.00|0",
+      "targeted_rule_ids": [
+        "RULE-13"
+      ],
+      "rationale": "rate = 0.01 \u2014 near-zero rate; ERR_MIN_WAGE"
+    },
+    {
+      "test_id": "ERR-008",
+      "category": "error",
+      "input": {
+        "employee_id": "ERR008",
+        "hours": "40.00",
+        "rate": "7.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 3
+      },
+      "pipe_input": "ERR008|40.00|7.00|N|0.00|3",
+      "targeted_rule_ids": [
+        "RULE-13"
+      ],
+      "rationale": "rate = 7.00 < 7.25 with dependents; ERR_MIN_WAGE (deps irrelevant for errors)"
+    },
+    {
+      "test_id": "ITR-001",
+      "category": "interaction",
+      "input": {
+        "employee_id": "ITR001",
+        "hours": "10.00",
+        "rate": "10.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 1
+      },
+      "pipe_input": "ITR001|10.00|10.00|N|0.00|1",
+      "targeted_rule_ids": [
+        "RULE-04",
+        "RULE-07"
+      ],
+      "rationale": "gross=100 (bracket1), 1 dep: 100*0.10=10, 10-80<0 \u2192 federal=0"
+    },
+    {
+      "test_id": "ITR-002",
+      "category": "interaction",
+      "input": {
+        "employee_id": "ITR002",
+        "hours": "40.00",
+        "rate": "12.50",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 1
+      },
+      "pipe_input": "ITR002|40.00|12.50|N|0.00|1",
+      "targeted_rule_ids": [
+        "RULE-04",
+        "RULE-07"
+      ],
+      "rationale": "gross=500 (bracket1 top), 1 dep: 50-80<0 \u2192 federal=0"
+    },
+    {
+      "test_id": "ITR-003",
+      "category": "interaction",
+      "input": {
+        "employee_id": "ITR003",
+        "hours": "40.00",
+        "rate": "20.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 1
+      },
+      "pipe_input": "ITR003|40.00|20.00|N|0.00|1",
+      "targeted_rule_ids": [
+        "RULE-05",
+        "RULE-07"
+      ],
+      "rationale": "gross=800 (bracket2), 1 dep: 96-80=16 federal"
+    },
+    {
+      "test_id": "ITR-004",
+      "category": "interaction",
+      "input": {
+        "employee_id": "ITR004",
+        "hours": "40.00",
+        "rate": "20.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 2
+      },
+      "pipe_input": "ITR004|40.00|20.00|N|0.00|2",
+      "targeted_rule_ids": [
+        "RULE-05",
+        "RULE-07"
+      ],
+      "rationale": "gross=800 (bracket2), 2 deps: 96-160<0 \u2192 federal=0"
+    },
+    {
+      "test_id": "ITR-005",
+      "category": "interaction",
+      "input": {
+        "employee_id": "ITR005",
+        "hours": "40.00",
+        "rate": "37.50",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 1
+      },
+      "pipe_input": "ITR005|40.00|37.50|N|0.00|1",
+      "targeted_rule_ids": [
+        "RULE-05",
+        "RULE-07"
+      ],
+      "rationale": "gross=1500 (bracket2 top), 1 dep: 1500*0.12=180, 180-80=100 federal"
+    },
+    {
+      "test_id": "ITR-006",
+      "category": "interaction",
+      "input": {
+        "employee_id": "ITR006",
+        "hours": "40.00",
+        "rate": "37.50",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 5
+      },
+      "pipe_input": "ITR006|40.00|37.50|N|0.00|5",
+      "targeted_rule_ids": [
+        "RULE-05",
+        "RULE-07",
+        "RULE-15"
+      ],
+      "rationale": "gross=1500 (bracket2 top), 5 deps (cap): 180-400<0 \u2192 federal=0"
+    },
+    {
+      "test_id": "ITR-007",
+      "category": "interaction",
+      "input": {
+        "employee_id": "ITR007",
+        "hours": "40.00",
+        "rate": "50.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 1
+      },
+      "pipe_input": "ITR007|40.00|50.00|N|0.00|1",
+      "targeted_rule_ids": [
+        "RULE-06",
+        "RULE-07"
+      ],
+      "rationale": "gross=2000 (bracket3), 1 dep: 2000*0.22=440, 440-80=360 federal"
+    },
+    {
+      "test_id": "ITR-008",
+      "category": "interaction",
+      "input": {
+        "employee_id": "ITR008",
+        "hours": "40.00",
+        "rate": "50.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 5
+      },
+      "pipe_input": "ITR008|40.00|50.00|N|0.00|5",
+      "targeted_rule_ids": [
+        "RULE-06",
+        "RULE-07",
+        "RULE-15"
+      ],
+      "rationale": "gross=2000 (bracket3), 5 deps (cap): 440-400=40 federal"
+    },
+    {
+      "test_id": "ITR-009",
+      "category": "interaction",
+      "input": {
+        "employee_id": "ITR009",
+        "hours": "44.00",
+        "rate": "33.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "pipe_input": "ITR009|44.00|33.00|N|0.00|0",
+      "targeted_rule_ids": [
+        "RULE-02",
+        "RULE-05",
+        "RULE-06"
+      ],
+      "rationale": "OT 44h @ $33: 40*33 + 4*49.50 = 1320+198 = 1518; bracket 3"
+    },
+    {
+      "test_id": "ITR-010",
+      "category": "interaction",
+      "input": {
+        "employee_id": "ITR010",
+        "hours": "41.00",
+        "rate": "36.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "pipe_input": "ITR010|41.00|36.00|N|0.00|0",
+      "targeted_rule_ids": [
+        "RULE-02",
+        "RULE-05"
+      ],
+      "rationale": "OT 41h @ $36: 40*36 + 1*54 = 1440+54 = 1494; stays bracket 2"
+    },
+    {
+      "test_id": "ITR-011",
+      "category": "interaction",
+      "input": {
+        "employee_id": "ITR011",
+        "hours": "40.00",
+        "rate": "90.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "pipe_input": "ITR011|40.00|90.00|N|0.00|0",
+      "targeted_rule_ids": [
+        "RULE-06",
+        "RULE-09"
+      ],
+      "rationale": "gross=3600 (bracket3 + SS capped): SS = 3242.31 * 0.062"
+    },
+    {
+      "test_id": "ITR-012",
+      "category": "interaction",
+      "input": {
+        "employee_id": "ITR012",
+        "hours": "168.00",
+        "rate": "25.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "pipe_input": "ITR012|168.00|25.00|N|0.00|0",
+      "targeted_rule_ids": [
+        "RULE-02",
+        "RULE-06",
+        "RULE-09"
+      ],
+      "rationale": "max hours 168h @ $25: 40*25 + 128*37.50 = 1000+4800=5800; bracket3 + SS cap"
+    },
+    {
+      "test_id": "ITR-013",
+      "category": "interaction",
+      "input": {
+        "employee_id": "ITR013",
+        "hours": "40.00",
+        "rate": "50.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 5
+      },
+      "pipe_input": "ITR013|40.00|50.00|N|0.00|5",
+      "targeted_rule_ids": [
+        "RULE-06",
+        "RULE-07",
+        "RULE-15"
+      ],
+      "rationale": "gross=2000, dependents=5 (at cap): effective=5, allowance=400"
+    },
+    {
+      "test_id": "ITR-014",
+      "category": "interaction",
+      "input": {
+        "employee_id": "ITR014",
+        "hours": "40.00",
+        "rate": "50.00",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 6
+      },
+      "pipe_input": "ITR014|40.00|50.00|N|0.00|6",
+      "targeted_rule_ids": [
+        "RULE-06",
+        "RULE-07",
+        "RULE-15"
+      ],
+      "rationale": "gross=2000, dependents=6 (over cap): capped at 5, same result as 5 deps"
+    },
+    {
+      "test_id": "ITR-015",
+      "category": "interaction",
+      "input": {
+        "employee_id": "ITR015",
+        "hours": "0.00",
+        "rate": "0.00",
+        "is_salaried": "Y",
+        "salary": "10.00",
+        "dependents": 0
+      },
+      "pipe_input": "ITR015|0.00|0.00|Y|10.00|0",
+      "targeted_rule_ids": [
+        "RULE-03",
+        "RULE-04",
+        "RULE-12"
+      ],
+      "rationale": "salaried $10/wk (tiny salary): all taxes may consume all net pay; test floor=0"
+    },
+    {
+      "test_id": "ITR-016",
+      "category": "interaction",
+      "input": {
+        "employee_id": "ITR016",
+        "hours": "0.00",
+        "rate": "0.00",
+        "is_salaried": "Y",
+        "salary": "2000.00",
+        "dependents": 6
+      },
+      "pipe_input": "ITR016|0.00|0.00|Y|2000.00|6",
+      "targeted_rule_ids": [
+        "RULE-03",
+        "RULE-06",
+        "RULE-07",
+        "RULE-15"
+      ],
+      "rationale": "salaried $2000 + 6 deps (capped to 5): bracket3, allowance=400, federal=40"
+    },
+    {
+      "test_id": "ADV-001",
+      "category": "adversarial",
+      "input": {
+        "employee_id": "ADV001",
+        "hours": "0.00",
+        "rate": "0.00",
+        "is_salaried": "Y",
+        "salary": "781.92",
+        "dependents": 0
+      },
+      "pipe_input": "ADV001|0.00|0.00|Y|781.92|0",
+      "targeted_rule_ids": [
+        "RULE-08",
+        "RULE-11"
+      ],
+      "rationale": "state-tax rounding: gross=781.92 \u2192 gross*0.0307 \u2248 N.005 (half-up trigger)"
+    },
+    {
+      "test_id": "ADV-002",
+      "category": "adversarial",
+      "input": {
+        "employee_id": "ADV002",
+        "hours": "0.00",
+        "rate": "0.00",
+        "is_salaried": "Y",
+        "salary": "800.04",
+        "dependents": 0
+      },
+      "pipe_input": "ADV002|0.00|0.00|Y|800.04|0",
+      "targeted_rule_ids": [
+        "RULE-05",
+        "RULE-11"
+      ],
+      "rationale": "bracket-2 federal rounding: gross=800.04 \u2192 gross*0.12 \u2248 N.005"
+    },
+    {
+      "test_id": "ADV-003",
+      "category": "adversarial",
+      "input": {
+        "employee_id": "ADV003",
+        "hours": "0.00",
+        "rate": "0.00",
+        "is_salaried": "Y",
+        "salary": "400.05",
+        "dependents": 0
+      },
+      "pipe_input": "ADV003|0.00|0.00|Y|400.05|0",
+      "targeted_rule_ids": [
+        "RULE-04",
+        "RULE-11"
+      ],
+      "rationale": "bracket-1 federal rounding: gross=400.05 \u2192 gross*0.10 \u2248 N.005"
+    },
+    {
+      "test_id": "ADV-004",
+      "category": "adversarial",
+      "input": {
+        "employee_id": "ADV004",
+        "hours": "0.00",
+        "rate": "0.00",
+        "is_salaried": "Y",
+        "salary": "1645.48",
+        "dependents": 0
+      },
+      "pipe_input": "ADV004|0.00|0.00|Y|1645.48|0",
+      "targeted_rule_ids": [
+        "RULE-06",
+        "RULE-11"
+      ],
+      "rationale": "bracket-3 federal rounding: gross=1645.48 \u2192 gross*0.22 \u2248 N.005"
+    },
+    {
+      "test_id": "ADV-005",
+      "category": "adversarial",
+      "input": {
+        "employee_id": "ADV005",
+        "hours": "0.00",
+        "rate": "0.00",
+        "is_salaried": "Y",
+        "salary": "790.40",
+        "dependents": 0
+      },
+      "pipe_input": "ADV005|0.00|0.00|Y|790.40|0",
+      "targeted_rule_ids": [
+        "RULE-09",
+        "RULE-11"
+      ],
+      "rationale": "SS-tax rounding: gross=790.4 \u2192 gross*0.062 \u2248 N.005"
+    },
+    {
+      "test_id": "ADV-006",
+      "category": "adversarial",
+      "input": {
+        "employee_id": "ADV006",
+        "hours": "0.00",
+        "rate": "0.00",
+        "is_salaried": "Y",
+        "salary": "758.97",
+        "dependents": 0
+      },
+      "pipe_input": "ADV006|0.00|0.00|Y|758.97|0",
+      "targeted_rule_ids": [
+        "RULE-10",
+        "RULE-11"
+      ],
+      "rationale": "medicare rounding: gross=758.97 \u2192 gross*0.0145 \u2248 N.005"
+    },
+    {
+      "test_id": "ADV-007",
+      "category": "adversarial",
+      "input": {
+        "employee_id": "ADV007",
+        "hours": "41.00",
+        "rate": "13.33",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "pipe_input": "ADV007|41.00|13.33|N|0.00|0",
+      "targeted_rule_ids": [
+        "RULE-02",
+        "RULE-11"
+      ],
+      "rationale": "OT rounding: 1 OT hour @ $13.33 \u2192 OT pay = 13.33*1.5 = 19.995, half-up \u2192 20.00"
+    },
+    {
+      "test_id": "ADV-008",
+      "category": "adversarial",
+      "input": {
+        "employee_id": "ADV008",
+        "hours": "43.00",
+        "rate": "11.11",
+        "is_salaried": "N",
+        "salary": "0.00",
+        "dependents": 0
+      },
+      "pipe_input": "ADV008|43.00|11.11|N|0.00|0",
+      "targeted_rule_ids": [
+        "RULE-02",
+        "RULE-11"
+      ],
+      "rationale": "OT rounding: 3 OT hours @ $11.11 \u2192 OT pay = 49.995, half-up \u2192 50.00"
+    },
+    {
+      "test_id": "ADV-009",
+      "category": "adversarial",
+      "input": {
+        "employee_id": "ADV009",
+        "hours": "0.00",
+        "rate": "0.00",
+        "is_salaried": "Y",
+        "salary": "666.71",
+        "dependents": 1
+      },
+      "pipe_input": "ADV009|0.00|0.00|Y|666.71|1",
+      "targeted_rule_ids": [
+        "RULE-05",
+        "RULE-07",
+        "RULE-11"
+      ],
+      "rationale": "dep allowance edge: gross=666.71, 1 dep \u2192 federal_base=666.71*0.12\u224880.005, after dep: \u22480.005 \u2192 rounds to 0.01 or 0.00"
+    },
+    {
+      "test_id": "ADV-010",
+      "category": "adversarial",
+      "input": {
+        "employee_id": "ADV010",
+        "hours": "0.00",
+        "rate": "0.00",
+        "is_salaried": "Y",
+        "salary": "3242.31",
+        "dependents": 2
+      },
+      "pipe_input": "ADV010|0.00|0.00|Y|3242.31|2",
+      "targeted_rule_ids": [
+        "RULE-07",
+        "RULE-09",
+        "RULE-11"
+      ],
+      "rationale": "gross = SS cap exactly, 2 deps: SS = 3242.31*0.062=201.02; bracket 3 federal with dep reduction"
+    }
+  ]
+}

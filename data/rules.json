@@ -1,0 +1,393 @@
+{
+  "schema_version": "1.0",
+  "source_file": "payroll.cbl",
+  "total_lines": 291,
+  "generated_by": "cbldiff/rule_miner.py",
+  "rule_count": 15,
+  "rules": [
+    {
+      "rule_id": "RULE-01",
+      "category": "gross_calculation",
+      "description": "Hourly gross = hours * rate",
+      "source_file": "payroll.cbl",
+      "source_lines": [
+        167,
+        191
+      ],
+      "paragraph": "COMPUTE-GROSS",
+      "condition": "IS_SALARIED = N AND HOURS <= 40",
+      "action": "GROSS = HOURS * RATE",
+      "formula": "WS-GROSS ROUNDED = WS-BASE-HOURS * WS-RATE",
+      "boundary_values": {
+        "max_straight_time_hours": 40
+      },
+      "rounding": "HALF_UP_2DP",
+      "depends_on": [],
+      "constants": {
+        "WS-OT-THRESHOLD": "40"
+      }
+    },
+    {
+      "rule_id": "RULE-02",
+      "category": "gross_calculation",
+      "description": "Overtime: hours > 40 -> excess hours at 1.5x rate",
+      "source_file": "payroll.cbl",
+      "source_lines": [
+        167,
+        191
+      ],
+      "paragraph": "COMPUTE-GROSS",
+      "condition": "IS_SALARIED = N AND HOURS > 40",
+      "action": "GROSS = (40 * RATE) + ((HOURS - 40) * RATE * 1.5)",
+      "formula": "WS-GROSS ROUNDED = (WS-BASE-HOURS * WS-RATE) + (WS-OVERTIME-HOURS * WS-RATE * 1.5)",
+      "boundary_values": {
+        "overtime_threshold_hours": 40,
+        "overtime_multiplier": 1.5
+      },
+      "rounding": "HALF_UP_2DP",
+      "depends_on": [],
+      "constants": {
+        "WS-OT-THRESHOLD": "40"
+      }
+    },
+    {
+      "rule_id": "RULE-03",
+      "category": "gross_calculation",
+      "description": "Salaried: IS_SALARIED=Y -> gross = weekly salary",
+      "source_file": "payroll.cbl",
+      "source_lines": [
+        167,
+        191
+      ],
+      "paragraph": "COMPUTE-GROSS",
+      "condition": "IS_SALARIED = Y",
+      "action": "GROSS = WEEKLY_SALARY",
+      "formula": "WS-GROSS = WS-SALARY",
+      "boundary_values": {},
+      "rounding": "none",
+      "depends_on": [],
+      "constants": {}
+    },
+    {
+      "rule_id": "RULE-04",
+      "category": "federal_tax",
+      "description": "Fed bracket 1: gross <= 500.00        -> rate 10%",
+      "source_file": "payroll.cbl",
+      "source_lines": [
+        192,
+        231
+      ],
+      "paragraph": "COMPUTE-FEDERAL-TAX",
+      "condition": "GROSS <= 500.00",
+      "action": "FEDERAL_TAX_BASE = GROSS * 0.10",
+      "formula": "WS-FEDERAL-BEFORE-DEP ROUNDED = WS-GROSS * WS-FED-RATE-1",
+      "boundary_values": {
+        "bracket_1_upper_limit": 500.0,
+        "rate": 0.1
+      },
+      "rounding": "HALF_UP_2DP",
+      "depends_on": [
+        "RULE-01",
+        "RULE-02",
+        "RULE-03"
+      ],
+      "constants": {
+        "WS-BRACKET-1-LIMIT": "500.00",
+        "WS-FED-RATE-1": ".10"
+      }
+    },
+    {
+      "rule_id": "RULE-05",
+      "category": "federal_tax",
+      "description": "Fed bracket 2: 500.00 < gross and gross <= 1500.00        -> rate 12%",
+      "source_file": "payroll.cbl",
+      "source_lines": [
+        192,
+        231
+      ],
+      "paragraph": "COMPUTE-FEDERAL-TAX",
+      "condition": "GROSS > 500.00 AND GROSS <= 1500.00",
+      "action": "FEDERAL_TAX_BASE = GROSS * 0.12",
+      "formula": "WS-FEDERAL-BEFORE-DEP ROUNDED = WS-GROSS * WS-FED-RATE-2",
+      "boundary_values": {
+        "bracket_2_lower_exclusive": 500.0,
+        "bracket_2_upper_inclusive": 1500.0,
+        "rate": 0.12
+      },
+      "rounding": "HALF_UP_2DP",
+      "depends_on": [
+        "RULE-01",
+        "RULE-02",
+        "RULE-03"
+      ],
+      "constants": {
+        "WS-BRACKET-1-LIMIT": "500.00",
+        "WS-BRACKET-2-LIMIT": "1500.00",
+        "WS-FED-RATE-2": ".12"
+      }
+    },
+    {
+      "rule_id": "RULE-06",
+      "category": "federal_tax",
+      "description": "Fed bracket 3: gross > 1500.00         -> rate 22%",
+      "source_file": "payroll.cbl",
+      "source_lines": [
+        192,
+        231
+      ],
+      "paragraph": "COMPUTE-FEDERAL-TAX",
+      "condition": "GROSS > 1500.00",
+      "action": "FEDERAL_TAX_BASE = GROSS * 0.22",
+      "formula": "WS-FEDERAL-BEFORE-DEP ROUNDED = WS-GROSS * WS-FED-RATE-3",
+      "boundary_values": {
+        "bracket_3_lower_exclusive": 1500.0,
+        "rate": 0.22
+      },
+      "rounding": "HALF_UP_2DP",
+      "depends_on": [
+        "RULE-01",
+        "RULE-02",
+        "RULE-03"
+      ],
+      "constants": {
+        "WS-BRACKET-2-LIMIT": "1500.00",
+        "WS-FED-RATE-3": ".22"
+      }
+    },
+    {
+      "rule_id": "RULE-07",
+      "category": "federal_tax",
+      "description": "Dependent allowance: $80 deducted from federal tax per dependent (max 5); minimum federal tax = 0",
+      "source_file": "payroll.cbl",
+      "source_lines": [
+        192,
+        231
+      ],
+      "paragraph": "COMPUTE-FEDERAL-TAX",
+      "condition": "ALWAYS (post-bracket calculation)",
+      "action": "FEDERAL_TAX = max(0, FEDERAL_TAX_BASE - DEPENDENTS * 80.00)",
+      "formula": "WS-FEDERAL-TAX ROUNDED = WS-FEDERAL-BEFORE-DEP - (WS-EFFECTIVE-DEPS * 80.00); floor at 0",
+      "boundary_values": {
+        "allowance_per_dependent": 80.0,
+        "min_federal_tax": 0.0
+      },
+      "rounding": "HALF_UP_2DP",
+      "depends_on": [
+        "RULE-04",
+        "RULE-05",
+        "RULE-06",
+        "RULE-15"
+      ],
+      "constants": {
+        "WS-DEP-AMOUNT": "80.00",
+        "WS-MAX-DEPENDENTS": "5"
+      }
+    },
+    {
+      "rule_id": "RULE-08",
+      "category": "state_tax",
+      "description": "State tax: flat 3.07% of gross (PA rate)",
+      "source_file": "payroll.cbl",
+      "source_lines": [
+        232,
+        238
+      ],
+      "paragraph": "COMPUTE-STATE-TAX",
+      "condition": "STATUS = OK",
+      "action": "STATE_TAX = GROSS * 0.0307",
+      "formula": "WS-STATE-TAX ROUNDED = WS-GROSS * WS-STATE-RATE",
+      "boundary_values": {
+        "state_tax_rate": 0.0307,
+        "jurisdiction": "PA"
+      },
+      "rounding": "HALF_UP_2DP",
+      "depends_on": [
+        "RULE-01",
+        "RULE-02",
+        "RULE-03"
+      ],
+      "constants": {
+        "WS-STATE-RATE": ".0307"
+      }
+    },
+    {
+      "rule_id": "RULE-09",
+      "category": "social_security",
+      "description": "Social Security: 6.20% of gross; weekly SS cap = 3242.31 (annual $168,600 / 52)",
+      "source_file": "payroll.cbl",
+      "source_lines": [
+        239,
+        250
+      ],
+      "paragraph": "COMPUTE-SS-TAX",
+      "condition": "STATUS = OK",
+      "action": "SS_TAX = min(GROSS, 3242.31) * 0.062",
+      "formula": "WS-SS-TAX ROUNDED = (WS-GROSS >= WS-SS-WEEKLY-CAP ? WS-SS-WEEKLY-CAP : WS-GROSS) * WS-SS-RATE",
+      "boundary_values": {
+        "ss_rate": 0.062,
+        "weekly_cap": 3242.31,
+        "annual_wage_base": 168600.0,
+        "weeks_per_year": 52
+      },
+      "rounding": "HALF_UP_2DP",
+      "depends_on": [
+        "RULE-01",
+        "RULE-02",
+        "RULE-03"
+      ],
+      "constants": {
+        "WS-SS-WEEKLY-CAP": "3242.31",
+        "WS-SS-RATE": ".062"
+      }
+    },
+    {
+      "rule_id": "RULE-10",
+      "category": "medicare",
+      "description": "Medicare: flat 1.45% of gross (no cap)",
+      "source_file": "payroll.cbl",
+      "source_lines": [
+        251,
+        258
+      ],
+      "paragraph": "COMPUTE-MEDICARE-TAX",
+      "condition": "STATUS = OK",
+      "action": "MEDICARE_TAX = GROSS * 0.0145",
+      "formula": "WS-MEDICARE-TAX ROUNDED = WS-GROSS * WS-MED-RATE",
+      "boundary_values": {
+        "medicare_rate": 0.0145,
+        "cap": "none"
+      },
+      "rounding": "HALF_UP_2DP",
+      "depends_on": [
+        "RULE-01",
+        "RULE-02",
+        "RULE-03"
+      ],
+      "constants": {
+        "WS-MED-RATE": ".0145"
+      }
+    },
+    {
+      "rule_id": "RULE-11",
+      "category": "rounding",
+      "description": "All monetary amounts rounded HALF-UP to 2 decimal places (COBOL ROUNDED clause = round half away from 0)",
+      "source_file": "payroll.cbl",
+      "source_lines": [
+        167,
+        258
+      ],
+      "paragraph": [
+        "COMPUTE-GROSS",
+        "COMPUTE-FEDERAL-TAX",
+        "COMPUTE-STATE-TAX",
+        "COMPUTE-SS-TAX",
+        "COMPUTE-MEDICARE-TAX"
+      ],
+      "condition": "ALWAYS (applies to all COMPUTE statements)",
+      "action": "Round each computed monetary value to 2 decimal places HALF_UP",
+      "formula": "COBOL ROUNDED clause on every COMPUTE = round half away from zero",
+      "boundary_values": {
+        "decimal_places": 2,
+        "rounding_mode": "HALF_UP"
+      },
+      "rounding": "HALF_UP_2DP_ALL_COMPUTES",
+      "depends_on": [],
+      "constants": {}
+    },
+    {
+      "rule_id": "RULE-12",
+      "category": "net_pay",
+      "description": "Net pay = gross - federal - state - ss - medicare; net pay floor = 0.00",
+      "source_file": "payroll.cbl",
+      "source_lines": [
+        259,
+        270
+      ],
+      "paragraph": "COMPUTE-NET-PAY",
+      "condition": "STATUS = OK",
+      "action": "NET_PAY = max(0, GROSS - FEDERAL_TAX - STATE_TAX - SS_TAX - MEDICARE_TAX)",
+      "formula": "WS-NET-PAY = WS-GROSS - WS-FEDERAL-TAX - WS-STATE-TAX - WS-SS-TAX - WS-MEDICARE-TAX; floor at 0",
+      "boundary_values": {
+        "min_net_pay": 0.0
+      },
+      "rounding": "none",
+      "depends_on": [
+        "RULE-04",
+        "RULE-05",
+        "RULE-06",
+        "RULE-07",
+        "RULE-08",
+        "RULE-09",
+        "RULE-10"
+      ],
+      "constants": {}
+    },
+    {
+      "rule_id": "RULE-13",
+      "category": "validation",
+      "description": "Minimum wage guard: rate < 7.25 -> status = ERR_MIN_WAGE",
+      "source_file": "payroll.cbl",
+      "source_lines": [
+        148,
+        166
+      ],
+      "paragraph": "VALIDATE-INPUT",
+      "condition": "IS_SALARIED = N AND RATE < 7.25",
+      "action": "STATUS = ERR_MIN_WAGE; all monetary outputs = 0.00",
+      "formula": "IF WS-RATE < WS-MIN-WAGE MOVE 'ERR_MIN_WAGE' TO WS-STATUS",
+      "boundary_values": {
+        "federal_minimum_wage": 7.25
+      },
+      "rounding": "none",
+      "depends_on": [],
+      "constants": {
+        "WS-MIN-WAGE": "7.25"
+      }
+    },
+    {
+      "rule_id": "RULE-14",
+      "category": "validation",
+      "description": "Hours guard: hours < 0 or hours > 168 -> status = ERR_HOURS",
+      "source_file": "payroll.cbl",
+      "source_lines": [
+        148,
+        166
+      ],
+      "paragraph": "VALIDATE-INPUT",
+      "condition": "IS_SALARIED = N AND (HOURS < 0 OR HOURS > 168)",
+      "action": "STATUS = ERR_HOURS; all monetary outputs = 0.00",
+      "formula": "IF WS-HOURS < 0 OR WS-HOURS > WS-MAX-HOURS MOVE 'ERR_HOURS' TO WS-STATUS",
+      "boundary_values": {
+        "min_hours": 0,
+        "max_hours": 168
+      },
+      "rounding": "none",
+      "depends_on": [],
+      "constants": {
+        "WS-MAX-HOURS": "168"
+      }
+    },
+    {
+      "rule_id": "RULE-15",
+      "category": "federal_tax",
+      "description": "Dependents cap: dependents > 5 capped at 5 (RULE-07) ============================================================",
+      "source_file": "payroll.cbl",
+      "source_lines": [
+        192,
+        231
+      ],
+      "paragraph": "COMPUTE-FEDERAL-TAX",
+      "condition": "DEPENDENTS > 5",
+      "action": "EFFECTIVE_DEPENDENTS = 5",
+      "formula": "IF WS-DEPENDENTS > WS-MAX-DEPENDENTS MOVE WS-MAX-DEPENDENTS TO WS-EFFECTIVE-DEPS",
+      "boundary_values": {
+        "max_dependents": 5
+      },
+      "rounding": "none",
+      "depends_on": [],
+      "constants": {
+        "WS-MAX-DEPENDENTS": "5"
+      }
+    }
+  ]
+}

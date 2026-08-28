@@ -1,0 +1,26 @@
+# CBLDiff Phase 1 — Sample inputs for smoke testing payroll.cbl
+# Format: EMPLOYEE_ID|HOURS|RATE|IS_SALARIED(Y/N)|SALARY|DEPENDENTS
+# One record per line. Comment lines start with #.
+#
+# --- STRAIGHT-TIME HOURLY ---
+E001|40.00|20.00|N|0.00|0
+E002|45.00|20.00|N|0.00|2
+E003|25.00|10.00|N|0.00|0
+# --- BRACKET 1 TOP: gross = 500.00 ---
+E004|25.00|20.00|N|0.00|0
+# --- BRACKET 2/3 KEY BOUNDARY: gross = 1500.00 (40*37.50 = 1500) ---
+E005|40.00|37.50|N|0.00|0
+# --- JUST ABOVE KEY BOUNDARY: gross = 1500.01 (not trivially achievable, use 40*37.51=1500.40) ---
+E005B|40.00|37.51|N|0.00|0
+# --- BRACKET 3: gross = 2000 ---
+E006|40.00|50.00|N|0.00|1
+# --- SALARIED ---
+E007|0.00|0.00|Y|2000.00|3
+# --- DEPENDENT ALLOWANCE wipes all federal tax: 10h*10=100 gross, 0 deps=10 tax; 2 deps→10-160<0→0 ---
+E008|10.00|10.00|N|0.00|5
+# --- SS CAP: gross above weekly SS cap (40*100=4000 > 3242.31) ---
+E009|40.00|100.00|N|0.00|0
+# --- ERROR: below minimum wage ---
+E010|40.00|5.00|N|0.00|0
+# --- ERROR: hours exceeded ---
+E011|200.00|20.00|N|0.00|0
