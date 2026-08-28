@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "cbldiff-mcp": {
+      "command": "python",
+      "args": ["cbldiff/mcp_server.py"]
+    }
+  }
+}
