@@ -12,6 +12,43 @@ When AI modernizes legacy COBOL into modern languages like Java, textual code co
 
 CBLDiff executes the original COBOL and modernized Java against the **same deterministic test suite**, captures their outputs, and compares their behavior **execution-by-execution**. Any divergence is detected, analyzed by rule, and reported with full traceability.
 
+### High-Level Workflow
+
+```mermaid
+flowchart TD
+    A["Legacy COBOL<br/>(payroll.cbl)"]
+    B["IBM Bob<br/>(Agent Mode)"]
+    C["Modernized Java<br/>(Java 21)"]
+    D["CBLDiff<br/>(Verification Engine)"]
+    E1["Rule Miner"]
+    E2["Test Synthesizer"]
+    E3["Dual Executor"]
+    E4["Behavioral<br/>Parity Analyzer"]
+    E5["Critical-Rule<br/>Verification Gate"]
+    F["VERIFIED/<br/>NOT_VERIFIED"]
+    
+    A -->|source code| B
+    B -->|modernization| C
+    C -->|Java implementation| D
+    D -->|orchestrates| E1
+    D -->|orchestrates| E2
+    D -->|orchestrates| E3
+    D -->|orchestrates| E4
+    D -->|orchestrates| E5
+    E5 -->|final verdict| F
+    
+    style A fill:#e1f5ff
+    style B fill:#fff3e0
+    style C fill:#e1f5ff
+    style D fill:#f3e5f5
+    style E1 fill:#f3e5f5
+    style E2 fill:#f3e5f5
+    style E3 fill:#f3e5f5
+    style E4 fill:#f3e5f5
+    style E5 fill:#f3e5f5
+    style F fill:#c8e6c9
+```
+
 ---
 
 ## Key Results
@@ -59,6 +96,46 @@ After correcting the Java implementation:
 
 This demonstrates CBLDiff's ability to detect behavioral regressions and validate repairs.
 
+### Regression Detection Workflow
+
+```mermaid
+flowchart TD
+    A["Correct Implementation<br/>gross <code>&lt;=</code> 1500.00"]
+    B["Intentional Mutation<br/>gross <code>&lt;</code> 1500.00"]
+    C["70 Tests Executed"]
+    D["3 Divergent Tests Found:<br/>BND-006<br/>BND-007<br/>ITR-005"]
+    E["Parity Score<br/>95.71%"]
+    F["RULE-05 Analysis<br/>Boundary: gross = 1500.00<br/>Affected:<br/>federal_tax, net_pay"]
+    G["Critical-Rule Gate<br/>FAIL"]
+    H["NOT_VERIFIED"]
+    I["Java Repair<br/>gross <code>&lt;=</code> 1500.00"]
+    J["70/70 Tests Matching<br/>100% Parity"]
+    K["VERIFIED"]
+    
+    A -->|mutate| B
+    B -->|execute| C
+    C -->|analyze| D
+    D -->|calculate| E
+    E -->|trace| F
+    F -->|evaluate| G
+    G -->|verdict| H
+    
+    I -->|restore correct code| J
+    J -->|verdict| K
+    
+    style A fill:#c8e6c9
+    style B fill:#ffccbc
+    style C fill:#fff9c4
+    style D fill:#ffccbc
+    style E fill:#ffccbc
+    style F fill:#ffccbc
+    style G fill:#ffccbc
+    style H fill:#ffcdd2
+    style I fill:#c8e6c9
+    style J fill:#c8e6c9
+    style K fill:#c8e6c9
+```
+
 ---
 
 ## How CBLDiff Works
@@ -80,27 +157,103 @@ CBLDiff is a 5-stage verification pipeline:
 5. **Critical-Rule Verification Gate**  
    Applies pass/fail logic based on divergence threshold; outputs final verification status.
 
+### Detailed Verification Pipeline
+
+```mermaid
+flowchart TD
+    A["cobol/payroll.cbl<br/>(Source)"]
+    B["Rule Miner"]
+    C["data/rules.json<br/>(15 Rules)"]
+    D["Test Synthesizer"]
+    E["data/test_inputs.json<br/>(70 Tests)"]
+    F["Dual Executor"]
+    G["cobol/payroll.cbl<br/>Execution"]
+    H["java/PayrollProcessor.java<br/>Execution"]
+    I["data/cobol_outputs.json"]
+    J["data/java_outputs.json"]
+    K["Behavioral<br/>Parity Analyzer"]
+    L["Field-by-field<br/>Comparison"]
+    M["Divergence<br/>Analysis"]
+    N["Rule/Provenance<br/>Mapping"]
+    O["data/divergence_report.json"]
+    P["Parity Gate<br/>score >= 0.95?"]
+    Q["Critical-Rule Gate<br/>no divergence?"]
+    R["data/verification_result.json"]
+    S["VERIFIED/<br/>NOT_VERIFIED"]
+    
+    A --> B
+    B --> C
+    C --> D
+    D --> E
+    E --> F
+    F --> G
+    F --> H
+    G --> I
+    H --> J
+    I --> K
+    J --> K
+    K --> L
+    L --> M
+    M --> N
+    N --> O
+    O --> P
+    P -->|yes| Q
+    P -->|no| R
+    Q -->|yes| R
+    Q -->|no| R
+    R --> S
+    
+    style A fill:#e1f5ff
+    style C fill:#f3e5f5
+    style E fill:#f3e5f5
+    style G fill:#e1f5ff
+    style H fill:#e1f5ff
+    style I fill:#f3e5f5
+    style J fill:#f3e5f5
+    style O fill:#f3e5f5
+    style R fill:#f3e5f5
+    style S fill:#c8e6c9
+```
+
 ---
 
 ## IBM Bob Integration
 
 CBLDiff is integrated with **IBM Bob**, an AI agent platform for enterprise code transformation. Bob orchestrates the modernization and verification workflow:
 
-```text
-IBM Bob (Agent Mode)
-    |
-Bob Skill: parity-check
-    |
-Local MCP Server
-    |
-MCP Tool: verify_parity
-    |
-CBLDiff Verification
-    |
-Verification Result
+### IBM Bob Integration Architecture
+
+```mermaid
+flowchart TD
+    A["Developer"]
+    B["IBM Bob<br/>(Agent Mode)"]
+    C["parity-check<br/>Skill"]
+    D["Local MCP Server"]
+    E["verify_parity<br/>MCP Tool"]
+    F["cbldiff/<br/>parity_analyzer.py"]
+    G["Verification Result"]
+    H["Structured Result<br/>to Bob UI"]
+    
+    A -->|modernize COBOL| B
+    B -->|invoke| C
+    C -->|call| D
+    D -->|execute| E
+    E -->|run engine| F
+    F -->|generate| G
+    G -->|return| H
+    H -->|display| B
+    
+    style A fill:#fff9c4
+    style B fill:#fff3e0
+    style C fill:#f3e5f5
+    style D fill:#f3e5f5
+    style E fill:#f3e5f5
+    style F fill:#e8f5e9
+    style G fill:#f3e5f5
+    style H fill:#fff3e0
 ```
 
-### Bob Configuration
+**Integration Components:**
 - **Bob Mode:** Plan & Agent modes
 - **Skill:** `parity-check` (embedded in workspace)
 - **Server:** Local Model Context Protocol (MCP) server
@@ -123,6 +276,35 @@ Verification Result
 | [data/execution_summary.json](data/execution_summary.json) | Execution results summary |
 | [data/divergence_report.json](data/divergence_report.json) | Divergence analysis by rule |
 | [data/verification_result.json](data/verification_result.json) | Final verification verdict |
+
+### Verification Decision Logic
+
+```mermaid
+flowchart TD
+    A["Parity Score<br/>vs Threshold"]
+    B{"Parity Score<br/>>= 0.95?"}
+    C{"Critical-Rule<br/>Divergence?"}
+    D["[PASS]<br/>VERIFIED"]
+    E["[FAIL]<br/>NOT_VERIFIED"]
+    F["[FAIL]<br/>NOT_VERIFIED"]
+    
+    A --> B
+    B -->|YES| C
+    B -->|NO| E
+    C -->|NO| D
+    C -->|YES| F
+    
+    style A fill:#fff9c4
+    style B fill:#ffe0b2
+    style C fill:#ffe0b2
+    style D fill:#c8e6c9
+    style E fill:#ffcdd2
+    style F fill:#ffcdd2
+```
+
+**Verification Decision:**
+- **VERIFIED:** Parity score >= 0.95 AND no critical-rule divergence
+- **NOT_VERIFIED:** Parity score < 0.95 OR critical-rule divergence detected
 
 ---
 
@@ -231,7 +413,46 @@ cbldiff/
 
 ---
 
+## Test Coverage
+
+CBLDiff synthesizes 70 deterministic test cases across five categories to achieve comprehensive rule coverage:
+
+| Test Category | Count | Purpose |
+|---------------|-------|---------|
+| **Boundary** | 20 | Test rule boundary conditions (e.g., gross = 1500.00) |
+| **Normal** | 16 | Exercise standard business logic paths |
+| **Error** | 8 | Validate error handling and edge cases |
+| **Interaction** | 16 | Test rule combinations and dependencies |
+| **Adversarial** | 10 | Challenge edge cases with extreme values |
+| **TOTAL** | **70** | **Full rule coverage** |
+
+Each test case exercises one or more of the 15 extracted business rules and generates structured provenance data to trace divergences back to specific rules.
+
+---
+
 ## Running the Project
+
+### Developer Workflow
+
+```mermaid
+sequenceDiagram
+    participant Dev as Developer
+    participant Bob as IBM Bob
+    participant CBL as COBOL
+    participant Java as Java
+    participant CBLDiff as CBLDiff
+    
+    Dev->>Bob: Modernize legacy COBOL
+    Bob->>Java: Generate Java modernization
+    Dev->>CBLDiff: Verify parity
+    CBLDiff->>CBL: Execute test suite
+    CBLDiff->>Java: Execute same test suite
+    CBLDiff->>CBLDiff: Compare outputs field-by-field
+    CBLDiff->>Bob: Return structured result
+    Bob->>Dev: Display VERIFIED / NOT_VERIFIED
+```
+
+This workflow ensures developers can validate behavioral equivalence after AI-driven modernization before deploying to production.
 
 ### Environment
 - **OS:** Ubuntu 20.04+ (WSL2 on Windows)
