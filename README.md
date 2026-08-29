@@ -78,17 +78,36 @@ CBLDiff demonstrates its detection capability through a controlled regression te
 - **Result:** 70/70 tests matching, 100% parity, VERIFIED
 
 ### Injected Regression
-- **Change:** `gross <= 1500.00` -> `gross < 1500.00`
-- **Critical Boundary:** `gross = 1500.00`
 
-### Regression Detection
-| Divergent Tests | Count | Affected Rule | Affected Fields | Parity |
-|-----------------|-------|---------------|-----------------|--------|
-| BND-006, BND-007, ITR-005 | 3 | RULE-05 | federal_tax, net_pay | 95.71% |
-| **Final Status** | — | — | — | **NOT_VERIFIED** |
+A controlled regression changed the Java federal-tax boundary from:
+
+```diff
+- gross <= 1500.00
++ gross < 1500.00
+```
+
+**Critical Boundary Tested:** `gross = 1500.00`
+
+### Regression Detection Results
+
+The mutation caused 3 divergent test cases:
+
+| Test ID | Category | Details |
+|---------|----------|---------|
+| BND-006 | Boundary | gross exactly at 1500.00 |
+| BND-007 | Boundary | gross at 1500.00 edge case |
+| ITR-005 | Interaction | Rule-05 interaction with other tax rules |
+
+**Verification Impact:**
+- Matching Tests: 67/70
+- Divergent Tests: 3
+- Parity Score: 95.71%
+- Affected Rule: RULE-05 (Federal tax bracket boundary)
+- Affected Fields: federal_tax, net_pay
+- **Final Status: NOT_VERIFIED**
 
 ### Post-Repair Verification
-After correcting the Java implementation:
+After correcting the Java implementation back to the original logic (`gross <= 1500.00`):
 - **Matching Tests:** 70/70
 - **Divergent Tests:** 0
 - **Parity:** 100%
