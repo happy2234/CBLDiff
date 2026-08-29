@@ -24,6 +24,12 @@ CBLDiff executes the original COBOL and modernized Java against the **same deter
 | Final Baseline: Divergent Tests | 0 |
 | **Behavioral Parity** | **100% VERIFIED** |
 
+### Verification Evidence
+
+![CBLDiff Verification Result](bob_sessions/04-phase6-parity-verification.png)
+
+**Figure 1:** Final verification result from IBM Bob integration showing 70/70 matching tests, 0 divergent tests, and [PASS] VERIFIED status.
+
 ---
 
 ## Controlled Regression Demonstration
