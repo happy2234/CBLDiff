@@ -85,7 +85,7 @@ except (ValueError, TypeError):
         echo "          Java : $java_out"
         echo "          DELTA:$diff_detail"
         FAIL=$((FAIL + 1))
-        ERRORS+=("$input → $diff_detail")
+        ERRORS+=("$input -> $diff_detail")
     fi
     echo ""
 }

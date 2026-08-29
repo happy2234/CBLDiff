@@ -73,12 +73,12 @@ def parse_header_rules(lines: list[str]) -> dict[str, dict]:
             current_id = m.group(1).upper()
             raw = m.group(2).strip()
             # Normalise arrow character
-            raw = raw.replace("→", "->")
+            raw = raw.replace("->", "->")
             rules[current_id] = {"raw_text": raw, "start_line": lineno}
         elif current_id and re.match(r"\s+\*>\s+\S", text):
             # Continuation line of multi-line rule description
             continuation = text.strip().lstrip("*>").strip()
-            continuation = continuation.replace("→", "->")
+            continuation = continuation.replace("->", "->")
             rules[current_id]["raw_text"] += " " + continuation
     return rules
 

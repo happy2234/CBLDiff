@@ -70,19 +70,19 @@ result = run_cobol({"employee_id":"E001","hours":40,"rate":20,...})
 | Rule ID  | Description                                                   | Source Lines |
 |----------|---------------------------------------------------------------|--------------|
 | RULE-01  | Hourly gross = hours × rate                                   | ~168         |
-| RULE-02  | Overtime: hours > 40 → excess at 1.5× rate                   | ~162         |
+| RULE-02  | Overtime: hours > 40 -> excess at 1.5× rate                   | ~162         |
 | RULE-03  | Salaried gross = weekly salary (hours/rate ignored)           | ~155         |
-| RULE-04  | Federal bracket 1: gross ≤ 500.00 → 10% tax                  | ~180         |
-| RULE-05  | Federal bracket 2: gross > 500 and ≤ 1500.00 → 12% tax       | ~185         |
-| RULE-06  | Federal bracket 3: gross > 1500.00 → 22% tax                 | ~191         |
+| RULE-04  | Federal bracket 1: gross ≤ 500.00 -> 10% tax                  | ~180         |
+| RULE-05  | Federal bracket 2: gross > 500 and ≤ 1500.00 -> 12% tax       | ~185         |
+| RULE-06  | Federal bracket 3: gross > 1500.00 -> 22% tax                 | ~191         |
 | RULE-07  | Dependent allowance: $80/dependent deducted from federal tax  | ~196         |
 | RULE-08  | State tax: flat 3.07% of gross                                | ~213         |
 | RULE-09  | Social Security: 6.20% of gross; weekly cap = $3,242.31       | ~219         |
 | RULE-10  | Medicare: flat 1.45% of gross (no cap)                        | ~229         |
 | RULE-11  | All monetary values rounded half-up to 2 decimal places       | (ROUNDED clauses) |
 | RULE-12  | Net pay = gross − federal − state − ss − medicare; floor = 0  | ~235         |
-| RULE-13  | Hourly rate < $7.25 → ERR_MIN_WAGE                           | ~145         |
-| RULE-14  | Hours < 0 or hours > 168 → ERR_HOURS                         | ~140         |
+| RULE-13  | Hourly rate < $7.25 -> ERR_MIN_WAGE                           | ~145         |
+| RULE-14  | Hours < 0 or hours > 168 -> ERR_HOURS                         | ~140         |
 | RULE-15  | Dependents > 5 capped at 5 (RULE-07 sub-rule)                | ~197         |
 
 ## Key Boundary Conditions for CBLDiff Testing

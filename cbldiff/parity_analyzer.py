@@ -141,10 +141,10 @@ def _gross_bracket_region(gross: float | None) -> str:
     if gross is None:
         return "unknown"
     if gross <= 500.0:
-        return "gross_bracket_1"          # ≤ 500 → federal 10 %
+        return "gross_bracket_1"          # ≤ 500 -> federal 10 %
     if gross <= 1500.0:
-        return "gross_bracket_2"          # 500 < g ≤ 1500 → federal 12 %
-    return "gross_bracket_3"              # > 1500 → federal 22 %
+        return "gross_bracket_2"          # 500 < g ≤ 1500 -> federal 12 %
+    return "gross_bracket_3"              # > 1500 -> federal 22 %
 
 
 def _identify_rules_for_field(
@@ -160,7 +160,7 @@ def _identify_rules_for_field(
     *field*.  Uses three layers of evidence (most specific wins):
 
     1. Explicit targeted_rule_ids from the test input (synthetic labels).
-    2. Field→category mapping combined with gross bracket.
+    2. Field->category mapping combined with gross bracket.
     3. Full rule scan: boundary checks vs. the input gross.
     """
     # ---- Layer 1: use the test's own targeted rule labels ----------------
@@ -172,7 +172,7 @@ def _identify_rules_for_field(
             return overlap
         return targeted_rule_ids  # fall back to all targeted rules
 
-    # ---- Layer 2: field → governing rules --------------------------------
+    # ---- Layer 2: field -> governing rules --------------------------------
     return _rules_for_output_field(field, rule_index)
 
 
@@ -238,7 +238,7 @@ def _assign_cluster_key(
       3. Return the cluster label as a string.
 
     KMeans / DBSCAN are intentionally NOT added here because:
-      • The current dataset has zero divergences → no meaningful clusters
+      • The current dataset has zero divergences -> no meaningful clusters
         to learn.
       • With < 5 divergences any centroid-based method is unstable.
       • Deterministic grouping is more auditable and reproducible at
@@ -653,19 +653,19 @@ def build_verification_result(stats: dict, critical_gate: dict) -> dict:
         status = "VERIFIED"
         explanation = (
             f"Parity score {score:.4f} (≥ threshold {VERIFICATION_THRESHOLD}) "
-            f"and no critical-rule divergences detected → VERIFIED"
+            f"and no critical-rule divergences detected -> VERIFIED"
         )
     elif not parity_passes and not gate_passes:
         status = "NOT_VERIFIED"
         explanation = (
             f"Parity score {score:.4f} (< threshold {VERIFICATION_THRESHOLD}) "
             f"AND critical-rule divergence detected "
-            f"(rules: {', '.join(critical_gate['critical_rule_ids'])}) → NOT_VERIFIED"
+            f"(rules: {', '.join(critical_gate['critical_rule_ids'])}) -> NOT_VERIFIED"
         )
     elif not parity_passes:
         status = "NOT_VERIFIED"
         explanation = (
-            f"Parity score {score:.4f} (< threshold {VERIFICATION_THRESHOLD}) → NOT_VERIFIED"
+            f"Parity score {score:.4f} (< threshold {VERIFICATION_THRESHOLD}) -> NOT_VERIFIED"
         )
     else:
         # parity passes but critical gate blocks
@@ -673,7 +673,7 @@ def build_verification_result(stats: dict, critical_gate: dict) -> dict:
         explanation = (
             f"Parity score {score:.4f} (≥ threshold {VERIFICATION_THRESHOLD}) "
             f"but critical-rule divergence detected "
-            f"(rules: {', '.join(critical_gate['critical_rule_ids'])}) → NOT_VERIFIED"
+            f"(rules: {', '.join(critical_gate['critical_rule_ids'])}) -> NOT_VERIFIED"
         )
 
     result: dict = {

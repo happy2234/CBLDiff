@@ -1,13 +1,13 @@
 # Continue the approved CBLDiff project.
 
 PHASES COMPLETE:
-1. COBOL reference implementation ✅
-2. Bob COBOL → Java modernization ✅
-3. Rule Miner ✅
-4. Test Synthesizer ✅
-5. Dual Executor ✅
-6. Behavioral Parity Analyzer ✅
-7. Controlled regression + critical-rule verification gate ✅
+1. COBOL reference implementation [PASS]
+2. Bob COBOL -> Java modernization [PASS]
+3. Rule Miner [PASS]
+4. Test Synthesizer [PASS]
+5. Dual Executor [PASS]
+6. Behavioral Parity Analyzer [PASS]
+7. Controlled regression + critical-rule verification gate [PASS]
 
 CURRENT DEMO STATE:
 - Java intentionally contains the controlled boundary regression:
@@ -33,15 +33,15 @@ Make CBLDiff a reusable IBM Bob verification capability that Bob can invoke as p
 Required outcome:
 
 Bob
-  ↓
+  |
 CBLDiff Skill
-  ↓
+  |
 MCP tool
-  ↓
+  |
 CBLDiff verification pipeline
-  ↓
+  |
 verification_result.json
-  ↓
+  |
 result returned to Bob
 
 IMPLEMENT:
@@ -108,15 +108,15 @@ Do not create unnecessary agents.
 The integration must successfully demonstrate:
 
 Developer/Bob
-  ↓
+  |
 invoke CBLDiff
-  ↓
+  |
 CBLDiff reads current artifacts
-  ↓
+  |
 detects controlled regression
-  ↓
+  |
 returns NOT_VERIFIED
-  ↓
+  |
 identifies RULE-05 / gross=1500 boundary
 
 IMPORTANT:
@@ -157,13 +157,13 @@ After implementation:
 Continue the approved CBLDiff project.
 
 PHASES COMPLETE:
-1. COBOL reference implementation ✅
-2. Bob COBOL → Java modernization ✅
-3. Rule Miner ✅
-4. Test Synthesizer ✅
-5. Dual Executor ✅
-6. Behavioral Parity Analyzer ✅
-7. Controlled regression + critical-rule verification gate ✅
+1. COBOL reference implementation [PASS]
+2. Bob COBOL -> Java modernization [PASS]
+3. Rule Miner [PASS]
+4. Test Synthesizer [PASS]
+5. Dual Executor [PASS]
+6. Behavioral Parity Analyzer [PASS]
+7. Controlled regression + critical-rule verification gate [PASS]
 
 CURRENT DEMO STATE:
 - Java intentionally contains the controlled boundary regression:
@@ -189,15 +189,15 @@ Make CBLDiff a reusable IBM Bob verification capability that Bob can invoke as p
 Required outcome:
 
 Bob
-  ↓
+  |
 CBLDiff Skill
-  ↓
+  |
 MCP tool
-  ↓
+  |
 CBLDiff verification pipeline
-  ↓
+  |
 verification_result.json
-  ↓
+  |
 result returned to Bob
 
 IMPLEMENT:
@@ -264,15 +264,15 @@ Do not create unnecessary agents.
 The integration must successfully demonstrate:
 
 Developer/Bob
-  ↓
+  |
 invoke CBLDiff
-  ↓
+  |
 CBLDiff reads current artifacts
-  ↓
+  |
 detects controlled regression
-  ↓
+  |
 returns NOT_VERIFIED
-  ↓
+  |
 identifies RULE-05 / gross=1500 boundary
 
 IMPORTANT:
@@ -1061,16 +1061,16 @@ The regression is the boundary condition at `gross = 1500.00` — RULE-05 expect
 
 ```
 Developer / Bob
-    ↓
+    |
 parity-check Skill (auto-activates)
-    ↓
+    |
 verify_parity MCP tool (cbldiff-mcp)
-    ↓
-cbldiff/mcp_server.py  →  cbldiff/parity_analyzer.py (existing pipeline)
-    ↓
+    |
+cbldiff/mcp_server.py  ->  cbldiff/parity_analyzer.py (existing pipeline)
+    |
 data/verification_result.json  +  data/divergence_report.json
-    ↓
-Structured result returned to Bob → NOT_VERIFIED / RULE-05 / gross=1500.00
+    |
+Structured result returned to Bob -> NOT_VERIFIED / RULE-05 / gross=1500.00
 ```
 
 ---

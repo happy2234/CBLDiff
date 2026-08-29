@@ -25,5 +25,5 @@
   },
   "status": "VERIFIED",
   "verified": true,
-  "verdict_explanation": "Parity score 1.0000 (≥ threshold 0.95) and no critical-rule divergences detected → VERIFIED"
+  "verdict_explanation": "Parity score 1.0000 (≥ threshold 0.95) and no critical-rule divergences detected -> VERIFIED"
 }

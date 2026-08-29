@@ -117,20 +117,20 @@ assert_field "RULE-01 gross 40h@20" "E001|40.00|20.00|N|0.00|0" 2 "800.00"
 # RULE-02: 45h * 20/hr OT: 40*20 + 5*30 = 800+150 = 950
 assert_field "RULE-02 OT gross 45h@20" "E002|45.00|20.00|N|0.00|0" 2 "950.00"
 
-# RULE-04: bracket1, gross=400 → federal = 400*0.10 = 40.00
+# RULE-04: bracket1, gross=400 -> federal = 400*0.10 = 40.00
 assert_field "RULE-04 bracket1 gross=400 federal" "T03|40.00|10.00|N|0.00|0" 3 "40.00"
 
-# RULE-05: bracket2, gross=800 → federal = 800*0.12 = 96.00
+# RULE-05: bracket2, gross=800 -> federal = 800*0.12 = 96.00
 assert_field "RULE-05 bracket2 gross=800 federal" "E001|40.00|20.00|N|0.00|0" 3 "96.00"
 
 # RULE-05/06 KEY BOUNDARY: gross EXACTLY 1500.00 must use bracket2 (12%)
 # 1500 * 0.12 = 180.00  NOT 22%
 assert_field "KEY-BOUNDARY gross=1500.00 uses bracket2 (12%)" "E005|40.00|37.50|N|0.00|0" 3 "180.00"
 
-# RULE-06: bracket3, gross=2000 → 2000*0.22 = 440; dep=1: 440-80=360
+# RULE-06: bracket3, gross=2000 -> 2000*0.22 = 440; dep=1: 440-80=360
 assert_field "RULE-06 bracket3 gross=2000 dep=1 federal" "E006|40.00|50.00|N|0.00|1" 3 "360.00"
 
-# RULE-07: gross=950 bracket2=114; dep=2: 114-160<0 → 0
+# RULE-07: gross=950 bracket2=114; dep=2: 114-160<0 -> 0
 assert_field "RULE-07 dep allowance eliminates federal" "E002|45.00|20.00|N|0.00|2" 3 "0.00"
 
 # RULE-03: salaried 2000/wk
@@ -145,23 +145,23 @@ assert_field "RULE-09 ss_tax gross=800" "E001|40.00|20.00|N|0.00|0" 5 "49.60"
 # RULE-10: medicare = 1.45% of 800 = 11.60
 assert_field "RULE-10 medicare gross=800" "E001|40.00|20.00|N|0.00|0" 6 "11.60"
 
-# RULE-09 cap: gross=4000 > 3242.31 → SS = 3242.31 * 0.062 = 201.02
+# RULE-09 cap: gross=4000 > 3242.31 -> SS = 3242.31 * 0.062 = 201.02
 assert_field "RULE-09 SS cap gross=4000" "E009|40.00|100.00|N|0.00|0" 5 "201.02"
 
 # RULE-12: net = 800 - 96 - 24.56 - 49.60 - 11.60 = 618.24
 assert_field "RULE-12 net pay" "E001|40.00|20.00|N|0.00|0" 7 "618.24"
 
-# RULE-13: below minimum wage → ERR_MIN_WAGE
+# RULE-13: below minimum wage -> ERR_MIN_WAGE
 assert_field "RULE-13 ERR_MIN_WAGE" "E010|40.00|5.00|N|0.00|0" 8 "ERR_MIN_WAGE"
 
-# RULE-14: hours exceeded → ERR_HOURS
+# RULE-14: hours exceeded -> ERR_HOURS
 assert_field "RULE-14 ERR_HOURS" "E011|200.00|20.00|N|0.00|0" 8 "ERR_HOURS"
 
-# RULE-04 exact: gross=500.00 is bracket1 → 500*0.10=50
+# RULE-04 exact: gross=500.00 is bracket1 -> 500*0.10=50
 assert_field "RULE-04 exact boundary gross=500" "E004|25.00|20.00|N|0.00|0" 3 "50.00"
 
-# RULE-06: gross JUST ABOVE 1500 → bracket3
-# 40 * 37.51 = 1500.40 → 1500.40 * 0.22 = 330.09
+# RULE-06: gross JUST ABOVE 1500 -> bracket3
+# 40 * 37.51 = 1500.40 -> 1500.40 * 0.22 = 330.09
 assert_field "RULE-06 gross=1500.40 bracket3 (just above boundary)" "E005B|40.00|37.51|N|0.00|0" 3 "330.09"
 
 # ----------------------------------------------------------

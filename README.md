@@ -35,7 +35,7 @@ CBLDiff demonstrates its detection capability through a controlled regression te
 - **Result:** 70/70 tests matching, 100% parity, VERIFIED
 
 ### Injected Regression
-- **Change:** `gross <= 1500.00` → `gross < 1500.00`
+- **Change:** `gross <= 1500.00` -> `gross < 1500.00`
 - **Critical Boundary:** `gross = 1500.00`
 
 ### Regression Detection
@@ -49,7 +49,7 @@ After correcting the Java implementation:
 - **Matching Tests:** 70/70
 - **Divergent Tests:** 0
 - **Parity:** 100%
-- **Status:** ✅ **VERIFIED**
+- **Status:** [PASS] **VERIFIED**
 
 This demonstrates CBLDiff's ability to detect behavioral regressions and validate repairs.
 
@@ -82,15 +82,15 @@ CBLDiff is integrated with **IBM Bob**, an AI agent platform for enterprise code
 
 ```text
 IBM Bob (Agent Mode)
-    ↓
+    |
 Bob Skill: parity-check
-    ↓
+    |
 Local MCP Server
-    ↓
+    |
 MCP Tool: verify_parity
-    ↓
+    |
 CBLDiff Verification
-    ↓
+    |
 Verification Result
 ```
 
@@ -135,7 +135,7 @@ The repository contains comprehensive session records and evidence from IBM Bob 
 
 ---
 
-## Demo: Baseline → Regression → Detection → Repair → Verification
+## Demo: Baseline -> Regression -> Detection -> Repair -> Verification
 
 1. **Baseline Verification**  
    Execute original COBOL and Java; confirm 100% behavioral parity across 70 tests.

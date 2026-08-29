@@ -16,12 +16,12 @@
       *> BUSINESS RULES (source of truth for CBLDiff Rule Miner):
       *>
       *>  RULE-01  Hourly gross = hours * rate
-      *>  RULE-02  Overtime: hours > 40 → excess hours at 1.5x rate
-      *>  RULE-03  Salaried: IS_SALARIED=Y → gross = weekly salary
-      *>  RULE-04  Fed bracket 1: gross <= 500.00        → rate 10%
+      *>  RULE-02  Overtime: hours > 40 -> excess hours at 1.5x rate
+      *>  RULE-03  Salaried: IS_SALARIED=Y -> gross = weekly salary
+      *>  RULE-04  Fed bracket 1: gross <= 500.00        -> rate 10%
       *>  RULE-05  Fed bracket 2: 500.00 < gross
-      *>                      and gross <= 1500.00        → rate 12%
-      *>  RULE-06  Fed bracket 3: gross > 1500.00         → rate 22%
+      *>                      and gross <= 1500.00        -> rate 12%
+      *>  RULE-06  Fed bracket 3: gross > 1500.00         -> rate 22%
       *>  RULE-07  Dependent allowance: $80 deducted from federal tax
       *>           per dependent (max 5); minimum federal tax = 0
       *>  RULE-08  State tax: flat 3.07% of gross (PA rate)
@@ -32,9 +32,9 @@
       *>           places (COBOL ROUNDED clause = round half away from 0)
       *>  RULE-12  Net pay = gross - federal - state - ss - medicare;
       *>           net pay floor = 0.00
-      *>  RULE-13  Minimum wage guard: rate < 7.25 → status = ERR_MIN_WAGE
+      *>  RULE-13  Minimum wage guard: rate < 7.25 -> status = ERR_MIN_WAGE
       *>  RULE-14  Hours guard: hours < 0 or hours > 168
-      *>                        → status = ERR_HOURS
+      *>                        -> status = ERR_HOURS
       *>  RULE-15  Dependents cap: dependents > 5 capped at 5 (RULE-07)
       *>
       *> ============================================================

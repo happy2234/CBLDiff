@@ -49,7 +49,7 @@ REPO_ROOT   = SCRIPT_DIR.parent
 RULES_FILE  = REPO_ROOT / "data" / "rules.json"
 OUTPUT_FILE = REPO_ROOT / "data" / "test_inputs.json"
 
-# Fixed seed — must never change; same rules.json → same test_inputs.json
+# Fixed seed — must never change; same rules.json -> same test_inputs.json
 RANDOM_SEED = 42
 
 # ---------------------------------------------------------------------------
@@ -284,11 +284,11 @@ def generate_normal_cases() -> list[dict]:
 
     cases.append(nrm(15, 40.00, 20.00, "N", 0, 3,
         ["RULE-05", "RULE-07"],
-        "gross 800, 3 deps; federal = 96 - 240 < 0 → 0"))
+        "gross 800, 3 deps; federal = 96 - 240 < 0 -> 0"))
 
     cases.append(nrm(16, 40.00, 20.00, "N", 0, 5,
         ["RULE-05", "RULE-07", "RULE-15"],
-        "gross 800, 5 deps (max); federal = 96 - 400 < 0 → 0"))
+        "gross 800, 5 deps (max); federal = 96 - 400 < 0 -> 0"))
 
     return cases
 
@@ -349,11 +349,11 @@ def generate_interaction_cases() -> list[dict]:
     # Bracket 1 + dep allowance wipes federal tax
     cases.append(itr(1, 10.00, 10.00, "N", 0, 1,
         ["RULE-04", "RULE-07"],
-        "gross=100 (bracket1), 1 dep: 100*0.10=10, 10-80<0 → federal=0"))
+        "gross=100 (bracket1), 1 dep: 100*0.10=10, 10-80<0 -> federal=0"))
 
     cases.append(itr(2, 40.00, 12.50, "N", 0, 1,
         ["RULE-04", "RULE-07"],
-        "gross=500 (bracket1 top), 1 dep: 50-80<0 → federal=0"))
+        "gross=500 (bracket1 top), 1 dep: 50-80<0 -> federal=0"))
 
     # Bracket 2 + varying deps
     cases.append(itr(3, 40.00, 20.00, "N", 0, 1,
@@ -362,7 +362,7 @@ def generate_interaction_cases() -> list[dict]:
 
     cases.append(itr(4, 40.00, 20.00, "N", 0, 2,
         ["RULE-05", "RULE-07"],
-        "gross=800 (bracket2), 2 deps: 96-160<0 → federal=0"))
+        "gross=800 (bracket2), 2 deps: 96-160<0 -> federal=0"))
 
     # Bracket 2 top + 0 deps (key boundary)
     cases.append(itr(5, 40.00, 37.50, "N", 0, 1,
@@ -371,7 +371,7 @@ def generate_interaction_cases() -> list[dict]:
 
     cases.append(itr(6, 40.00, 37.50, "N", 0, 5,
         ["RULE-05", "RULE-07", "RULE-15"],
-        "gross=1500 (bracket2 top), 5 deps (cap): 180-400<0 → federal=0"))
+        "gross=1500 (bracket2 top), 5 deps (cap): 180-400<0 -> federal=0"))
 
     # Bracket 3 + deps
     cases.append(itr(7, 40.00, 50.00, "N", 0, 1,
@@ -437,7 +437,7 @@ def generate_adversarial_cases(rng: random.Random) -> list[dict]:  # noqa: ARG00
     Decimal(ROUND_HALF_UP) or COBOL ROUNDED.
 
     For each tax rate R, we want gross * R = N.005 for some integer N.
-    → gross = (N + 0.005) / R
+    -> gross = (N + 0.005) / R
 
     We generate one adversarial case per tax rate.
     We also include cases around the OT boundary where the OT gross itself
@@ -446,94 +446,94 @@ def generate_adversarial_cases(rng: random.Random) -> list[dict]:  # noqa: ARG00
     cases = []
 
     # State tax: rate = 0.0307
-    # gross * 0.0307 = N.005 → gross = N.005 / 0.0307
-    # N=24: 24.005 / 0.0307 = 781.9... → gross ≈ 781.92
+    # gross * 0.0307 = N.005 -> gross = N.005 / 0.0307
+    # N=24: 24.005 / 0.0307 = 781.9... -> gross ≈ 781.92
     gross_state = Decimal("24.005") / Decimal("0.0307")
     gross_state = float(gross_state.quantize(Decimal("0.01"), ROUND_HALF_UP))
     # Use salaried to avoid further rounding from hourly computation
     cases.append(adv(1, 0, 0, "Y", gross_state, 0,
         ["RULE-08", "RULE-11"],
-        f"state-tax rounding: gross={gross_state} → gross*0.0307 ≈ N.005 (half-up trigger)"))
+        f"state-tax rounding: gross={gross_state} -> gross*0.0307 ≈ N.005 (half-up trigger)"))
 
     # Federal bracket 2: rate = 0.12
-    # gross * 0.12 = N.005 → gross = N.005 / 0.12
-    # N=96: 96.005/0.12 = 800.042 → gross=800.04
+    # gross * 0.12 = N.005 -> gross = N.005 / 0.12
+    # N=96: 96.005/0.12 = 800.042 -> gross=800.04
     gross_fed2 = Decimal("96.005") / Decimal("0.12")
     gross_fed2 = float(gross_fed2.quantize(Decimal("0.01"), ROUND_HALF_UP))
     cases.append(adv(2, 0, 0, "Y", gross_fed2, 0,
         ["RULE-05", "RULE-11"],
-        f"bracket-2 federal rounding: gross={gross_fed2} → gross*0.12 ≈ N.005"))
+        f"bracket-2 federal rounding: gross={gross_fed2} -> gross*0.12 ≈ N.005"))
 
     # Federal bracket 1: rate = 0.10
-    # gross * 0.10 = N.005 → gross = N.005 / 0.10
+    # gross * 0.10 = N.005 -> gross = N.005 / 0.10
     # N=40: 40.005/0.10 = 400.05
     gross_fed1 = Decimal("40.005") / Decimal("0.10")
     gross_fed1 = float(gross_fed1.quantize(Decimal("0.01"), ROUND_HALF_UP))
     cases.append(adv(3, 0, 0, "Y", gross_fed1, 0,
         ["RULE-04", "RULE-11"],
-        f"bracket-1 federal rounding: gross={gross_fed1} → gross*0.10 ≈ N.005"))
+        f"bracket-1 federal rounding: gross={gross_fed1} -> gross*0.10 ≈ N.005"))
 
     # Federal bracket 3: rate = 0.22
-    # gross * 0.22 = N.005 → gross = N.005 / 0.22
+    # gross * 0.22 = N.005 -> gross = N.005 / 0.22
     # N=330: 330.005/0.22 = 1500.022... — too close to bracket boundary, use N=362:
     # 362.005/0.22 = 1645.48
     gross_fed3 = Decimal("362.005") / Decimal("0.22")
     gross_fed3 = float(gross_fed3.quantize(Decimal("0.01"), ROUND_HALF_UP))
     cases.append(adv(4, 0, 0, "Y", gross_fed3, 0,
         ["RULE-06", "RULE-11"],
-        f"bracket-3 federal rounding: gross={gross_fed3} → gross*0.22 ≈ N.005"))
+        f"bracket-3 federal rounding: gross={gross_fed3} -> gross*0.22 ≈ N.005"))
 
     # SS tax: rate = 0.062
-    # gross * 0.062 = N.005 → gross = N.005/0.062
+    # gross * 0.062 = N.005 -> gross = N.005/0.062
     # N=49: 49.005/0.062 = 790.40
     gross_ss = Decimal("49.005") / Decimal("0.062")
     gross_ss = float(gross_ss.quantize(Decimal("0.01"), ROUND_HALF_UP))
     cases.append(adv(5, 0, 0, "Y", gross_ss, 0,
         ["RULE-09", "RULE-11"],
-        f"SS-tax rounding: gross={gross_ss} → gross*0.062 ≈ N.005"))
+        f"SS-tax rounding: gross={gross_ss} -> gross*0.062 ≈ N.005"))
 
     # Medicare: rate = 0.0145
-    # gross * 0.0145 = N.005 → gross = N.005/0.0145
+    # gross * 0.0145 = N.005 -> gross = N.005/0.0145
     # N=11: 11.005/0.0145 = 758.97
     gross_med = Decimal("11.005") / Decimal("0.0145")
     gross_med = float(gross_med.quantize(Decimal("0.01"), ROUND_HALF_UP))
     cases.append(adv(6, 0, 0, "Y", gross_med, 0,
         ["RULE-10", "RULE-11"],
-        f"medicare rounding: gross={gross_med} → gross*0.0145 ≈ N.005"))
+        f"medicare rounding: gross={gross_med} -> gross*0.0145 ≈ N.005"))
 
     # OT gross rounding: choose hours and rate so that the OT pay
     # component itself rounds half-up
     # OT gross = 40*rate + ot_hours * rate * 1.5
     # Choose rate=13.33, ot_hours=1: OT component = 1 * 13.33 * 1.5 = 19.995
-    # → rounds to 20.00 (HALF_UP) vs 19.99 (truncate)
+    # -> rounds to 20.00 (HALF_UP) vs 19.99 (truncate)
     cases.append(adv(7, 41.00, 13.33, "N", 0, 0,
         ["RULE-02", "RULE-11"],
-        "OT rounding: 1 OT hour @ $13.33 → OT pay = 13.33*1.5 = 19.995, half-up → 20.00"))
+        "OT rounding: 1 OT hour @ $13.33 -> OT pay = 13.33*1.5 = 19.995, half-up -> 20.00"))
 
     # Another OT case: rate=6.67/h — below min wage BUT want to test OT calc
     # Use rate = 15.00, ot_hours = 2.5: OT = 2.5*15*1.5 = 56.25 (clean, not interesting)
-    # rate = 11.11, ot_hours = 3: OT = 3 * 11.11 * 1.5 = 49.995 → 50.00 HALF_UP
+    # rate = 11.11, ot_hours = 3: OT = 3 * 11.11 * 1.5 = 49.995 -> 50.00 HALF_UP
     cases.append(adv(8, 43.00, 11.11, "N", 0, 0,
         ["RULE-02", "RULE-11"],
-        "OT rounding: 3 OT hours @ $11.11 → OT pay = 49.995, half-up → 50.00"))
+        "OT rounding: 3 OT hours @ $11.11 -> OT pay = 49.995, half-up -> 50.00"))
 
     # Dep allowance near zero: federal ≈ 0.005 (dep allowance within a
     # penny of wiping all federal tax)
     # bracket2, 1 dep: federal_base - 80 ≈ 0.005
-    # gross*0.12 = 80.005 → gross = 80.005/0.12 = 666.71
+    # gross*0.12 = 80.005 -> gross = 80.005/0.12 = 666.71
     gross_dep_edge = Decimal("80.005") / Decimal("0.12")
     gross_dep_edge = float(gross_dep_edge.quantize(Decimal("0.01"), ROUND_HALF_UP))
     cases.append(adv(9, 0, 0, "Y", gross_dep_edge, 1,
         ["RULE-05", "RULE-07", "RULE-11"],
-        f"dep allowance edge: gross={gross_dep_edge}, 1 dep → "
+        f"dep allowance edge: gross={gross_dep_edge}, 1 dep -> "
         f"federal_base={gross_dep_edge}*0.12≈80.005, "
-        f"after dep: ≈0.005 → rounds to 0.01 or 0.00"))
+        f"after dep: ≈0.005 -> rounds to 0.01 or 0.00"))
 
     # Gross exactly at SS cap with rounding-sensitive OT
     # To get gross = 3242.31 via hourly OT:
     # 40*rate + ot_hours*rate*1.5 = 3242.31
     # rate*(40 + 1.5*ot_hours) = 3242.31
-    # ot_hours=1: rate * 41.5 = 3242.31 → rate = 78.13
+    # ot_hours=1: rate * 41.5 = 3242.31 -> rate = 78.13
     # Check: 40*78.13 + 1*78.13*1.5 = 3125.20 + 117.195 = 3242.395 ≈ 3242.40 (not exact)
     # Use salaried for exact SS cap test with non-trivial net
     cases.append(adv(10, 0, 0, "Y", 3242.31, 2,

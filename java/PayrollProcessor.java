@@ -167,7 +167,7 @@ public class PayrollProcessor {
 
     /**
      * Format a monetary value as PIC 9(7).99 — 7 zero-padded integer digits,
-     * decimal point, 2 decimal digits.  e.g. 800.00 → "0000800.00"
+     * decimal point, 2 decimal digits.  e.g. 800.00 -> "0000800.00"
      */
     private static String fmt(BigDecimal v) {
         BigDecimal scaled = v.setScale(2, RoundingMode.HALF_UP);
